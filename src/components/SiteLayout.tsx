@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Linkedin, Github } from "lucide-react";
+import { Linkedin, Github, Instagram } from "lucide-react";
 import type { ReactNode } from "react";
 
 const navLinks = [
@@ -41,6 +41,15 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
               <Linkedin size={20} />
+            </a>
+            <a
+              href="https://www.instagram.com/s4m1ksha/"
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="Instagram profile"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <Instagram size={20} />
             </a>
             <a
               href="https://github.com/Sam02i"

@@ -32,10 +32,13 @@ function Resume() {
   return (
     <SiteLayout>
       <div className="mx-auto max-w-[1600px] px-8 pb-10 pt-20">
-        <h1 className="mb-10 text-center text-6xl font-extrabold tracking-tight sm:text-8xl">
+        <h1 className="animate-rise-in mb-10 text-center text-6xl font-extrabold tracking-tight sm:text-8xl">
           Resume.
         </h1>
-        <p className="mx-auto max-w-[1400px] text-center text-sm leading-relaxed text-foreground">
+        <p
+          className="animate-rise-in mx-auto max-w-[1400px] text-center text-sm leading-relaxed text-foreground"
+          style={{ animationDelay: "100ms" }}
+        >
           <span>
             I&apos;m a Computer Science &amp; Engineering student at SRM University of Science and Technology, specializing in Artificial Intelligence and Machine Learning,
           </span>
@@ -47,7 +50,10 @@ function Resume() {
       </div>
 
       <section className="mx-auto grid max-w-[1600px] gap-8 px-8 pb-16 lg:grid-cols-[1.1fr_1fr]">
-        <div className="flex min-w-0 flex-col gap-4">
+        <div
+          className="animate-rise-in flex min-w-0 flex-col gap-4"
+          style={{ animationDelay: "180ms" }}
+        >
           <img
             src={resumePage}
             alt="Resume of Samiksha Tripathy"
@@ -63,7 +69,10 @@ function Resume() {
           </a>
         </div>
 
-        <div className="grid min-w-0 grid-cols-2 gap-4">
+        <div
+          className="animate-rise-in grid min-w-0 grid-cols-2 gap-4"
+          style={{ animationDelay: "260ms" }}
+        >
           <img
             src={photoGroup}
             alt="Samiksha with her cohort at a tech event in New Delhi"
