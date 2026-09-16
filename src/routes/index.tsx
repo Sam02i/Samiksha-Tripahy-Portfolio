@@ -1,15 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import portrait from "@/assets/samiksha.jpg";
 import sketchNeural from "@/assets/sketch-neural.png";
 import sketchChip from "@/assets/sketch-chip.png";
 import sketchArm from "@/assets/sketch-arm.png";
-import cacheCover from "@/assets/project-cache-eviction.png";
-import transfusionCover from "@/assets/transfusion-demo.png";
+import cacheCover from "@/assets/hit-rate-chart.png";
+import transfusionCover from "@/assets/transfusion-hero.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
+import agrioptimaCover from "@/assets/agrioptima-cover.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,24 +36,35 @@ export const Route = createFileRoute("/")({
 // its arrow buttons already handle any number of cards.
 const projects = [
   {
+    slug: "cache-management",
     title: "Cache Management\nStrategy Research.",
     image: cacheCover,
-    alt: "Diagram showing CPU, cache memory and main memory transfers for cache eviction policy analysis",
+    alt: "Chart comparing hit rate vs cache size for LRU, LFU, and ML-based eviction policies",
     github: "https://github.com/Sam02i/Cache-Eviction-Analysis",
   },
   {
+    slug: "transfusion-need",
     title: "Predictive Analytics for\nTransfusion Need.",
     image: transfusionCover,
-    alt: "Landing page for the Transfusion Risk Checker, a portfolio ML demo predicting transfusion risk from clinical vitals",
+    alt: "Live result screen from the trained Random Forest model estimating transfusion risk, showing a 68% elevated risk gauge",
     github: "https://github.com/Sam02i/Predictive-Analytics-for-Transfusion-Need",
   },
   {
+    slug: "agrioptima-ai",
+    title: "AgriOptima AI.",
+    image: agrioptimaCover,
+    alt: "AgriOptima AI, a rule-based crop recommendation backend",
+    github: "https://github.com/Sam02i/agrioptima-ai",
+  },
+  {
+    slug: "task-receipts",
     title: "Task Receipts.",
     image: taskReceiptsCover,
     alt: "Task Receipts, a retro receipt-printer styled session and task tracker",
     github: "https://github.com/Sam02i/Task-Receipts",
   },
   {
+    slug: "anime-recommender",
     title: "Anime\nRecommender.",
     image: animeRecommenderCover,
     alt: "Anime Recommender, a full-stack recommendation platform using AniList and MyAnimeList APIs",
@@ -157,16 +169,62 @@ function Index() {
   );
 }
 
+// Auto-scroll speed in pixels per frame (~60fps). Small values keep the drift subtle.
+const AUTO_SCROLL_SPEED = 0.5;
+// How long a manual interaction (arrow click / touch) pauses auto-scroll before it resumes.
+const RESUME_DELAY_MS = 2500;
+
 function ProjectCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const isPausedRef = useRef(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const pause = () => {
+    isPausedRef.current = true;
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+  };
+
+  const resume = (delay = 0) => {
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      isPausedRef.current = false;
+    }, delay);
+  };
 
   const scrollByCard = (direction: 1 | -1) => {
     const track = trackRef.current;
     if (!track) return;
     const card = track.querySelector<HTMLElement>("[data-carousel-card]");
-    const step = (card?.offsetWidth ?? 380) + 24; // card width + gap
+    const step = (card?.offsetWidth ?? 320) + 24; // card width + gap
+    pause();
     track.scrollBy({ left: direction * step, behavior: "smooth" });
+    resume(RESUME_DELAY_MS);
   };
+
+  // Drift the carousel on its own, looping seamlessly, unless the user is
+  // hovering, touching, or has just interacted with it.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || projects.length <= 1) return;
+
+    let rafId: number;
+
+    const tick = () => {
+      if (!isPausedRef.current) {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        if (maxScroll > 0) {
+          track.scrollLeft =
+            track.scrollLeft >= maxScroll - 1
+              ? 0
+              : track.scrollLeft + AUTO_SCROLL_SPEED;
+        }
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   return (
     <section className="relative mx-auto max-w-[1600px] px-8 pt-20 pb-24">
@@ -175,6 +233,8 @@ function ProjectCarousel() {
           <button
             type="button"
             onClick={() => scrollByCard(-1)}
+            onMouseEnter={pause}
+            onMouseLeave={() => resume()}
             aria-label="Previous project"
             className="absolute left-2 top-[38%] z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 p-2 shadow-sm backdrop-blur transition-colors hover:bg-secondary sm:flex"
           >
@@ -183,6 +243,8 @@ function ProjectCarousel() {
           <button
             type="button"
             onClick={() => scrollByCard(1)}
+            onMouseEnter={pause}
+            onMouseLeave={() => resume()}
             aria-label="Next project"
             className="absolute right-2 top-[38%] z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 p-2 shadow-sm backdrop-blur transition-colors hover:bg-secondary sm:flex"
           >
@@ -193,34 +255,43 @@ function ProjectCarousel() {
 
       <div
         ref={trackRef}
-        className="flex gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        onMouseEnter={pause}
+        onMouseLeave={() => resume()}
+        onTouchStart={pause}
+        onTouchEnd={() => resume(RESUME_DELAY_MS)}
+        onWheel={() => {
+          pause();
+          resume(RESUME_DELAY_MS);
+        }}
+        className="flex items-stretch gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {projects.map((project, i) => (
           <article
             key={project.title}
             data-carousel-card
-            className="animate-rise-in w-[260px] shrink-0 sm:w-[320px] lg:w-[360px]"
+            className="animate-rise-in flex w-[260px] shrink-0 flex-col sm:w-[320px] lg:w-[360px]"
             style={{ animationDelay: `${120 + i * 120}ms` }}
           >
             <a
               href={project.github}
               target="_blank"
               rel="noreferrer noopener"
-              className="group block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card"
+              className="group block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card p-3"
             >
               <img
                 src={project.image}
                 alt={project.alt}
                 loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
               />
             </a>
-            <h3 className="mt-5 whitespace-pre-line text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+            <h3 className="mt-5 whitespace-pre-line text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
               {project.title}
             </h3>
             <Link
               to="/projects"
-              className="mt-4 inline-block rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
+              hash={project.slug}
+              className="mt-auto inline-block w-fit rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
             >
               Learn More
             </Link>
