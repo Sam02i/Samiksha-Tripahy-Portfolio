@@ -1,0 +1,7 @@
+# Nitro's Netlify preset (via TanStack Start) writes client assets to `dist/`
+# and the SSR handler to `.netlify/functions-internal/server/server.mjs`.
+# Keeping this in the repo overrides the UI publish setting, which pointed at
+# the non-existent `dist/client`.
+[build]
+  command = "bun run build"
+  publish = "dist"
