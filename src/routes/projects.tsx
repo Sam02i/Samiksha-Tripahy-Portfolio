@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Github, FileText, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { SiGithub, SiJupyter } from "react-icons/si";
 import { SiteLayout } from "@/components/SiteLayout";
+import { FadeImage } from "@/components/FadeImage";
 import cacheChart from "@/assets/hit-rate-chart.png";
 import transfusionResult from "@/assets/transfusion-hero.png";
 import agrioptimaCover from "@/assets/agrioptima-cover.png";
+import birdSpeciesCover from "@/assets/bird-species-cover.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 
@@ -27,7 +30,6 @@ export const Route = createFileRoute("/projects")({
 });
 
 type IconLink = {
-  icon: typeof Github;
   href: string;
   label: string;
 };
@@ -55,18 +57,47 @@ type SimpleProject = {
   imageHeight: number;
   alt: string;
   description: string;
-  links: { label: string; href: string }[];
+  links: IconLink[];
 };
+
+// Renders a single icon-link in a project's header, using the real brand
+// mark for GitHub (badged in a solid circle) and Jupyter (its natural
+// orange rings), and a plain external-link glyph for anything else
+// (e.g. "Live Demo").
+function ProjectIconLink({ href, label }: IconLink) {
+  const isNotebook = label === "Notebook";
+  const isGithub = label === "GitHub";
+
+  return (
+    <a
+      href={href}
+      target={isNotebook ? undefined : "_blank"}
+      rel={isNotebook ? undefined : "noreferrer noopener"}
+      aria-label={label}
+      title={label}
+      className="shrink-0 transition-opacity hover:opacity-75"
+    >
+      {isGithub ? (
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground text-background">
+          <SiGithub size={14} />
+        </span>
+      ) : isNotebook ? (
+        <SiJupyter size={22} />
+      ) : (
+        <ExternalLink size={22} className="text-muted-foreground" />
+      )}
+    </a>
+  );
+}
 
 const projects: (WriteupProject | SimpleProject)[] = [
   {
     kind: "simple",
     slug: "bird-species-identification",
     title: "Bird Species Identification from Images and Audio",
-    // TODO: add a real cover image — reusing cacheChart as a placeholder for now.
-    image: cacheChart,
-    imageWidth: 1050,
-    imageHeight: 675,
+    image: birdSpeciesCover,
+    imageWidth: 1456,
+    imageHeight: 1091,
     alt: "Bird Species Identification from Images and Audio project cover",
     description:
       "A multimodal deep learning system that identifies bird species from both photographs and recorded bird calls — a fine-tuned CNN for images, and a mel-spectrogram CNN for audio built from Xeno-Canto recordings, benchmarked against the open-source BirdNET baseline and deployed with a FastAPI inference endpoint returning top-3 predictions with confidence scores.",
@@ -82,12 +113,10 @@ const projects: (WriteupProject | SimpleProject)[] = [
     title: "Cache Eviction Policy Analysis: LRU vs LFU vs ML",
     icons: [
       {
-        icon: FileText,
         href: "/notebooks/cache_eviction_analysis.html",
         label: "Notebook",
       },
       {
-        icon: Github,
         href: "https://github.com/Sam02i/Cache-Eviction-Analysis",
         label: "GitHub",
       },
@@ -111,17 +140,14 @@ const projects: (WriteupProject | SimpleProject)[] = [
     title: "Predictive Analytics for Transfusion Need",
     icons: [
       {
-        icon: FileText,
         href: "/notebooks/Pred_Analytics_for_Transfusion.html",
         label: "Notebook",
       },
       {
-        icon: Github,
         href: "https://github.com/Sam02i/Predictive-Analytics-for-Transfusion-Need",
         label: "GitHub",
       },
       {
-        icon: ExternalLink,
         href: "https://predictive-analytics-for-transfusion-need-2vz8ssdal.vercel.app",
         label: "Live Demo",
       },
@@ -145,12 +171,10 @@ const projects: (WriteupProject | SimpleProject)[] = [
     title: "AgriOptima AI — Crop Recommendation Backend",
     icons: [
       {
-        icon: Github,
         href: "https://github.com/Sam02i/agrioptima-ai",
         label: "GitHub",
       },
       {
-        icon: ExternalLink,
         href: "https://agrioptima-ai.vercel.app/",
         label: "Live Demo",
       },
@@ -215,19 +239,9 @@ function Projects() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{project.title}</h2>
-                  <div className="flex shrink-0 gap-3">
-                    {project.icons.map(({ icon: Icon, href, label }) => (
-                      <a
-                        key={label}
-                        href={href}
-                        target={label === "Notebook" ? undefined : "_blank"}
-                        rel={label === "Notebook" ? undefined : "noreferrer noopener"}
-                        aria-label={label}
-                        title={label}
-                        className="text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        <Icon size={22} />
-                      </a>
+                  <div className="flex shrink-0 items-center gap-3">
+                    {project.icons.map((iconLink) => (
+                      <ProjectIconLink key={iconLink.label} {...iconLink} />
                     ))}
                   </div>
                 </div>
@@ -235,12 +249,13 @@ function Projects() {
                 <p className="mt-4 text-sm leading-relaxed text-foreground/80">{project.intro}</p>
 
                 <div className="mt-6 overflow-hidden rounded-2xl border border-border bg-card p-4">
-                  <img
+                  <FadeImage
                     src={project.image}
                     alt={project.imageAlt}
                     width={project.imageWidth}
                     height={project.imageHeight}
                     loading="lazy"
+                    wrapperClassName="w-full rounded-lg"
                     className="w-full rounded-lg object-contain"
                   />
                 </div>
@@ -261,35 +276,32 @@ function Projects() {
                 className="animate-rise-in mx-auto max-w-4xl scroll-mt-24"
                 style={{ animationDelay: `${120 + i * 120}ms` }}
               >
-                <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">
-                  {project.title}
-                </h2>
+                <div className="relative flex items-center justify-center">
+                  <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">
+                    {project.title}
+                  </h2>
+                  {project.links.length > 0 && (
+                    <div className="absolute right-0 flex items-center gap-3">
+                      {project.links.map((link) => (
+                        <ProjectIconLink key={link.label} {...link} />
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="group mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-                  <img
+                  <FadeImage
                     src={project.image}
                     alt={project.alt}
                     width={project.imageWidth}
                     height={project.imageHeight}
                     loading="lazy"
+                    wrapperClassName="w-full"
                     className="w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   />
                 </div>
                 <p className="mx-auto mt-6 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
                   {project.description}
                 </p>
-                <div className="mt-6 flex flex-wrap justify-center gap-3">
-                  {project.links.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      target={link.label === "Notebook" ? undefined : "_blank"}
-                      rel={link.label === "Notebook" ? undefined : "noreferrer noopener"}
-                      className="rounded-full border border-border px-6 py-2.5 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-secondary"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
               </article>
             ),
           )}

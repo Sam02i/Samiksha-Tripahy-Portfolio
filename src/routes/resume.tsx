@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
+import { FadeImage } from "@/components/FadeImage";
 import resumeAsset from "@/assets/Samiksha_Tripathy_Resume.pdf";
 import resumePage from "@/assets/resume-page.jpg";
 import photoRobotics from "@/assets/photo-robotics.jpg";
@@ -54,10 +55,11 @@ function Resume() {
           className="animate-rise-in flex min-w-0 flex-col gap-4"
           style={{ animationDelay: "180ms" }}
         >
-          <img
+          <FadeImage
             src={resumePage}
             alt="Resume of Samiksha Tripathy"
-            className="w-full rounded-2xl border border-border bg-card"
+            wrapperClassName="w-full rounded-2xl border border-border bg-card"
+            className="w-full rounded-2xl"
           />
           <a
             href={resumeAsset}
@@ -73,29 +75,33 @@ function Resume() {
           className="animate-rise-in grid min-w-0 grid-cols-2 gap-4"
           style={{ animationDelay: "260ms" }}
         >
-          <img
+          <FadeImage
             src={photoGroup}
             alt="Samiksha with her cohort at a tech event in New Delhi"
             loading="lazy"
-            className="col-span-2 aspect-[4/3] w-full rounded-2xl object-cover"
+            wrapperClassName="col-span-2 aspect-[4/3] w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
           />
-          <img
+          <FadeImage
             src={photoRobotics}
             alt="Robotic arm workcell in a university robotics lab"
             loading="lazy"
-            className="aspect-[3/4] w-full rounded-2xl object-cover"
+            wrapperClassName="aspect-[3/4] w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
           />
-          <img
+          <FadeImage
             src={photoWomenInTech}
             alt="Women in Tech global growth and policy breakfast event"
             loading="lazy"
-            className="aspect-[3/4] w-full rounded-2xl object-cover"
+            wrapperClassName="aspect-[3/4] w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
           />
-          <img
+          <FadeImage
             src={photoCode}
             alt="Python code for an anime dataset pipeline on a laptop screen"
             loading="lazy"
-            className="col-span-2 aspect-[4/3] w-full rounded-2xl object-cover"
+            wrapperClassName="col-span-2 aspect-[4/3] w-full rounded-2xl"
+            className="h-full w-full rounded-2xl object-cover"
           />
         </div>
       </section>

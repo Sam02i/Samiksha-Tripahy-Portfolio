@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { FadeImage } from "@/components/FadeImage";
 import portrait from "@/assets/samiksha.jpg";
 import sketchNeural from "@/assets/sketch-neural.png";
 import sketchChip from "@/assets/sketch-chip.png";
@@ -11,6 +12,7 @@ import transfusionCover from "@/assets/transfusion-hero.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 import agrioptimaCover from "@/assets/agrioptima-cover.png";
+import birdSpeciesCover from "@/assets/bird-species-cover.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,6 +37,13 @@ export const Route = createFileRoute("/")({
 // Add more entries here as new projects are written up — the carousel and
 // its arrow buttons already handle any number of cards.
 const projects = [
+  {
+    slug: "bird-species-identification",
+    title: "Bird Species\nIdentification.",
+    image: birdSpeciesCover,
+    alt: "A keel-billed toucan overlaid with a neural network graph, representing the Bird Species Identification project",
+    github: "/projects#bird-species-identification",
+  },
   {
     slug: "cache-management",
     title: "Cache Management\nStrategy Research.",
@@ -80,9 +89,10 @@ function Index() {
           className="group animate-rise-in mx-auto aspect-square w-full max-w-[36rem] overflow-hidden rounded-3xl shadow-lg"
           style={{ animationDelay: "0ms" }}
         >
-          <img
+          <FadeImage
             src={portrait}
             alt="Portrait of Samiksha Tripathy"
+            wrapperClassName="h-full w-full"
             className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
@@ -163,6 +173,11 @@ function Index() {
           </div>
         </div>
       </section>
+
+      <div className="animate-rise-in flex flex-col items-center gap-1 pb-4 text-muted-foreground" style={{ animationDelay: "400ms" }}>
+        <span className="text-xs font-semibold uppercase tracking-widest">Scroll to see projects</span>
+        <ChevronDown className="animate-bounce" size={20} aria-hidden="true" />
+      </div>
 
       <ProjectCarousel />
     </SiteLayout>
@@ -278,10 +293,11 @@ function ProjectCarousel() {
               rel="noreferrer noopener"
               className="group block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card p-3"
             >
-              <img
+              <FadeImage
                 src={project.image}
                 alt={project.alt}
                 loading="lazy"
+                wrapperClassName="h-full w-full"
                 className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
               />
             </a>
