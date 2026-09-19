@@ -1,0 +1,7 @@
+# File-based config takes precedence over the Netlify UI build settings.
+# The Nitro `netlify` preset writes static assets to `dist` (its publicDir is
+# `{{ rootDir }}/dist/{{ baseURL }}`) and the SSR handler to
+# `.netlify/functions-internal/server`, which Netlify picks up automatically.
+[build]
+  command = "bun run build"
+  publish = "dist"
