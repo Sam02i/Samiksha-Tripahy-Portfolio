@@ -11,8 +11,8 @@ import cacheCover from "@/assets/hit-rate-chart.png";
 import transfusionCover from "@/assets/transfusion-hero.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
-import agrioptimaCover from "@/assets/agrioptima-cover.png";
-import birdSpeciesCover from "@/assets/bird-species-cover.png";
+import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
+import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -105,7 +105,7 @@ function Index() {
             loading="lazy"
             width={768}
             height={768}
-            className="animate-float pointer-events-none absolute -top-14 right-0 hidden w-32 opacity-60 lg:block xl:w-40"
+            className="animate-float pointer-events-none absolute -top-14 right-0 hidden w-32 opacity-90 lg:block xl:w-40"
           />
           <img
             src={sketchChip}
@@ -114,7 +114,7 @@ function Index() {
             loading="lazy"
             width={768}
             height={768}
-            className="animate-float pointer-events-none absolute -left-20 top-40 hidden w-28 opacity-50 lg:block xl:w-32"
+            className="animate-float pointer-events-none absolute -left-20 top-40 hidden w-28 opacity-90 lg:block xl:w-32"
           />
           <img
             src={sketchArm}
@@ -123,7 +123,7 @@ function Index() {
             loading="lazy"
             width={768}
             height={768}
-            className="animate-float pointer-events-none absolute -bottom-8 right-0 hidden w-32 opacity-60 lg:block xl:w-40"
+            className="animate-float pointer-events-none absolute -bottom-8 right-0 hidden w-32 opacity-90 lg:block xl:w-40"
           />
 
           <h1

@@ -5,8 +5,8 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { FadeImage } from "@/components/FadeImage";
 import cacheChart from "@/assets/hit-rate-chart.png";
 import transfusionResult from "@/assets/transfusion-hero.png";
-import agrioptimaCover from "@/assets/agrioptima-cover.png";
-import birdSpeciesCover from "@/assets/bird-species-cover.png";
+import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
+import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 
