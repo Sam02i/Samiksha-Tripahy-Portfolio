@@ -38,11 +38,11 @@ export const Route = createFileRoute("/")({
 // its arrow buttons already handle any number of cards.
 const projects = [
   {
-    slug: "bird-species-identification",
-    title: "Bird Species\nIdentification.",
+    slug: "echofeather",
+    title: "EchoFeather.",
     image: birdSpeciesCover,
-    alt: "A keel-billed toucan overlaid with a neural network graph, representing the Bird Species Identification project",
-    github: "/projects#bird-species-identification",
+    alt: "A keel-billed toucan overlaid with a neural network graph, representing the EchoFeather bird species identification project",
+    github: "https://github.com/Sam02i/EchoFeather",
   },
   {
     slug: "cache-management",
@@ -174,7 +174,7 @@ function Index() {
         </div>
       </section>
 
-      <div className="animate-rise-in flex flex-col items-center gap-1 pb-4 text-muted-foreground" style={{ animationDelay: "400ms" }}>
+      <div className="animate-rise-in -mt-6 flex flex-col items-center gap-1 pb-4 text-muted-foreground" style={{ animationDelay: "400ms" }}>
         <span className="text-xs font-semibold uppercase tracking-widest">Scroll to see projects</span>
         <ChevronDown className="animate-bounce" size={20} aria-hidden="true" />
       </div>
