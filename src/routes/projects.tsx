@@ -1,7 +1,7 @@
+import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink } from "lucide-react";
 import { SiGithub, SiJupyter } from "react-icons/si";
-import type { ReactNode } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeImage } from "@/components/FadeImage";
 import cacheChart from "@/assets/hit-rate-chart.png";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/projects")({
       {
         name: "description",
         content:
-          "Machine learning and systems projects by Samiksha Tripathy: cache eviction policy analysis, transfusion risk prediction, a crop recommendation backend, and more.",
+          "Stories behind my projects: the questions I explored, the decisions I made, and what the results taught me.",
       },
       { property: "og:title", content: "Projects | Samiksha Tripathy" },
       {
@@ -35,12 +35,13 @@ type IconLink = {
   label: string;
 };
 
-type WriteupProject = {
-  kind: "writeup";
+type Project = {
   slug: string;
+  name: string;
   title: string;
-  icons: IconLink[];
-  intro: ReactNode;
+  inProgress?: boolean;
+  links: IconLink[];
+  intro: string;
   image: string;
   imageWidth: number;
   imageHeight: number;
@@ -49,39 +50,25 @@ type WriteupProject = {
   body: ReactNode[];
 };
 
-type SimpleProject = {
-  kind: "simple";
-  slug: string;
-  title: string;
-  /** Set when the project is still being built: shows an "In Progress" badge instead of live links. */
-  inProgress?: boolean;
-  image: string;
-  imageWidth: number;
-  imageHeight: number;
-  alt: string;
-  description: ReactNode;
-  links: IconLink[];
-};
-
-// Inline hyperlink for use inside project text, for calling out the specific
-// dataset, API, or library a paragraph mentions (e.g. "PyTorch", "AGMARKNET").
-function InlineLink({ href, children }: { href: string; children: ReactNode }) {
+function ResearchLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer noopener"
-      className="font-medium text-blue-600 underline underline-offset-2 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+      className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-4 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
     >
       {children}
     </a>
   );
 }
 
-// Renders a single icon-link in a project's header, using the real brand
-// mark for GitHub (badged in a solid circle) and Jupyter (its natural
-// orange rings), and a plain external-link glyph for anything else
-// (e.g. "Live Demo").
 function ProjectIconLink({ href, label }: IconLink) {
   const isNotebook = label === "Notebook";
   const isGithub = label === "GitHub";
@@ -93,7 +80,7 @@ function ProjectIconLink({ href, label }: IconLink) {
       rel={isNotebook ? undefined : "noreferrer noopener"}
       aria-label={label}
       title={label}
-      className="shrink-0 transition-opacity hover:opacity-75"
+      className="inline-flex h-10 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 text-xs font-medium transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm"
     >
       {isGithub ? (
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground text-background">
@@ -104,42 +91,52 @@ function ProjectIconLink({ href, label }: IconLink) {
       ) : (
         <ExternalLink size={22} className="text-muted-foreground" />
       )}
+      <span>{label}</span>
     </a>
   );
 }
 
-const projects: (WriteupProject | SimpleProject)[] = [
+const projects: Project[] = [
   {
-    kind: "simple",
     slug: "echofeather",
-    title: "EchoFeather",
+    name: "EchoFeather",
+    title: "You hear the bird. But what is it?",
     inProgress: true,
     image: birdSpeciesCover,
     imageWidth: 1456,
     imageHeight: 1091,
-    alt: "EchoFeather, a bird species identification project cover",
-    description: (
+    imageAlt: "EchoFeather, a bird species identification project cover",
+    intro:
+      "A bird call can be the only clue you get. EchoFeather explores how a recorded call or a photograph can turn that fleeting encounter into a possible identification.",
+    caption:
+      "A visual cover for the bird-identification project, currently in development.",
+    body: [
       <>
-        A multimodal deep learning system that identifies bird species from both photographs and
-        recorded bird calls: a fine-tuned CNN for images, and a mel-spectrogram CNN for audio
-        built on <InlineLink href="https://xeno-canto.org/">Xeno-Canto</InlineLink> recordings,
-        benchmarked against the open-source{" "}
-        <InlineLink href="https://birdnet.cornell.edu/">BirdNET</InlineLink> baseline. Built with{" "}
-        <InlineLink href="https://pytorch.org/">PyTorch</InlineLink> and deployed behind a{" "}
-        <strong className="font-semibold text-foreground">FastAPI</strong> inference endpoint that
-        returns <strong className="font-semibold text-foreground">top-3 predictions</strong> with
-        confidence scores.
-      </>
-    ),
-    links: [
-      { label: "GitHub", href: "https://github.com/Sam02i/EchoFeather" },
+        A clear photograph is not always available, and a sound alone can be
+        difficult to identify. I’m building EchoFeather around{" "}
+        <strong>
+          two ways to recognize the same bird: a photograph or a recorded call
+        </strong>
+        . Both paths lead to three possible species with confidence scores,
+        making uncertainty part of the experience instead of forcing a single
+        answer.
+      </>,
+      <>
+        The project is still in development, with the next step focused on
+        comparing its performance against{" "}
+        <ResearchLink href="https://birdnet.cornell.edu/">BirdNET</ResearchLink>
+        . I want to understand where each input helps and where it falls short.
+        The goal is <strong>a useful identification someone can assess</strong>,
+        with alternatives they can explore when the evidence is unclear.
+      </>,
     ],
+    links: [{ label: "GitHub", href: "https://github.com/Sam02i/EchoFeather" }],
   },
   {
-    kind: "writeup",
     slug: "cache-management",
-    title: "Cache Eviction Policy Analysis: LRU vs LFU vs ML",
-    icons: [
+    name: "Cache Eviction Research",
+    title: "When a simpler cache policy holds its own",
+    links: [
       {
         href: "/notebooks/cache_eviction_analysis.html",
         label: "Notebook",
@@ -149,53 +146,45 @@ const projects: (WriteupProject | SimpleProject)[] = [
         label: "GitHub",
       },
     ],
-    intro: (
-      <>
-        A head-to-head comparison of classic cache eviction policies (LRU, LFU) against a learned
-        policy: a{" "}
-        <strong className="font-semibold text-foreground">200-tree Random Forest</strong> trained
-        on oracle look-ahead features as an offline approximation of{" "}
-        <InlineLink href="https://en.wikipedia.org/wiki/Cache_replacement_policies#B%C3%A9l%C3%A1dy's_algorithm">
-          Belady&rsquo;s algorithm
-        </InlineLink>
-        , benchmarked on a synthetic{" "}
-        <InlineLink href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipfian</InlineLink> access
-        trace. The interesting question here isn&rsquo;t whether ML wins; it&rsquo;s exactly when
-        the extra model complexity is worth paying for, and when it clearly isn&rsquo;t.
-      </>
-    ),
+    intro:
+      "When a cache fills up, what should it forget? I explored whether a learned policy could make better eviction decisions than simple rules. The most useful result was a tradeoff: on this workload, the extra complexity bought very little.",
     image: cacheChart,
     imageWidth: 1050,
     imageHeight: 675,
-    imageAlt: "Chart comparing hit rate vs cache size for LRU, LFU, and ML-based eviction",
+    imageAlt:
+      "Chart comparing hit rate vs cache size for LRU, LFU, and ML-based eviction",
     caption:
-      "Hit rate vs. cache size across all three policies. LRU trails throughout, while LFU and ML stay nearly tied; the ML model's small edge at tiny cache sizes fades away as the cache grows.",
+      "The comparison that shaped the conclusion: frequency tracking and the learned policy achieved similar hit rates as cache size increased.",
     body: [
       <>
-        At cache size 10, LFU edges out the model on hit rate (
-        <strong className="font-semibold text-foreground">0.561 vs 0.559</strong>) while being
-        roughly <strong className="font-semibold text-foreground">14,000× faster</strong> per
-        eviction decision: a frequency-count lookup versus a full model prediction. On a
-        Zipf-distributed trace, a small number of items dominate traffic, so simple frequency
-        tracking is already a strong signal; the learned model&rsquo;s advantage only shows up at
-        very small cache sizes, where every eviction decision counts most.
+        I compared{" "}
+        <ResearchLink href="https://redis.io/docs/latest/develop/reference/eviction/">
+          recency-based and frequency-based eviction
+        </ResearchLink>{" "}
+        with a learned policy on a synthetic workload dominated by a small
+        number of popular items. At a cache size of 10, the frequency-based
+        policy achieved{" "}
+        <strong>56.1% hit rate versus 55.9% for the model</strong>, while being
+        roughly <strong>14,000 times faster per eviction decision</strong> in
+        this experiment. A burst of sequential accesses also let me explore what
+        happens when the usual access pattern is interrupted.
       </>,
       <>
-        The trace was split{" "}
-        <strong className="font-semibold text-foreground">80/20 into train/test</strong> before
-        any feature engineering to avoid leakage, with a synthetic sequential-scan burst injected
-        specifically to test scan resistance, a known weak point for history-based ML eviction.
-        The takeaway: frequency-based policies are hard to beat on stable, Zipf-like workloads;
-        ML eviction becomes more interesting on non-stationary traces where popularity shifts over
-        time.
+        The result changed the emphasis of the project:{" "}
+        <strong>extra model complexity needs to earn its place</strong>.
+        Frequency tracking held up well when popularity stayed stable; shifting
+        workloads remain a question for further testing. Because the learned
+        policy uses oracle look-ahead features, this is an offline experiment
+        rather than a deployable cache benchmark. That boundary matters as much
+        as the score.
       </>,
     ],
   },
   {
-    kind: "writeup",
     slug: "transfusion-need",
-    title: "Predictive Analytics for Transfusion Need",
-    icons: [
+    name: "Transfusion Risk Checker",
+    title: "Learning to question a promising prediction",
+    links: [
       {
         href: "/notebooks/Pred_Analytics_for_Transfusion.html",
         label: "Notebook",
@@ -210,43 +199,48 @@ const projects: (WriteupProject | SimpleProject)[] = [
       },
     ],
     intro:
-      "A small-data ML pipeline predicting blood transfusion need from six routine patient vitals (heart rate, respiratory rate, oxygen saturation, blood pressure, and sex), built on a 206-patient demo dataset with only 14 positive cases. What makes this project worth a look isn't a headline accuracy number, it's the debugging journey: two separate rounds of data leakage found and fixed, a database join-explosion bug traced back to a missing row key, and every result reported with honest cross-validated uncertainty instead of one cherry-picked score.",
+      "Could routine patient measurements help estimate transfusion need? Working with a demo dataset of 206 patients, I found that the harder problem was making the evaluation trustworthy. This project became a story about questioning the data before trusting the score.",
     image: transfusionResult,
     imageWidth: 1800,
     imageHeight: 1019,
-    imageAlt: "Landing page for the Transfusion Risk Checker, a portfolio ML demo predicting transfusion risk from clinical vitals",
+    imageAlt:
+      "Landing page for the Transfusion Risk Checker, a portfolio ML demo predicting transfusion risk from clinical vitals",
     caption:
-      "The live Transfusion Risk Checker landing page: a Random Forest model predicting transfusion risk from clinical vitals, running entirely client-side in the browser.",
+      "The browser-based demo makes the model’s output explorable. It is a portfolio experiment, not a clinical decision tool.",
     body: [
       <>
-        Vitals were pulled from MySQL and aggregated to one row per patient stay, with
-        label-defining columns explicitly excluded from the feature set to prevent leakage. Class
-        imbalance (<strong className="font-semibold text-foreground">14 positives out of 206</strong>)
-        was handled with{" "}
-        <InlineLink href="https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html">
-          SMOTE
-        </InlineLink>{" "}
-        applied inside each cross-validation fold (never on the full dataset beforehand), and{" "}
-        <strong className="font-semibold text-foreground">Random Forest</strong> and{" "}
-        <strong className="font-semibold text-foreground">Logistic Regression</strong> were
-        compared under stratified 5-fold CV, scoring 0.791 and 0.812 mean ROC-AUC respectively.
-        With a sample this small, the gap between them isn&rsquo;t statistically decisive, and the
-        project reports that honestly rather than declaring a winner.
+        Working with <strong>206 patients and only 14 positive cases</strong>, I
+        uncovered two rounds of{" "}
+        <ResearchLink href="https://scikit-learn.org/stable/common_pitfalls.html#data-leakage">
+          data leakage
+        </ResearchLink>{" "}
+        and a database join that multiplied rows. I traced the join to a missing
+        row key, reduced the data to one row per patient stay, and excluded
+        columns that defined the predicted outcome. The important work became{" "}
+        <strong>making the evaluation trustworthy</strong> before comparing
+        models.
       </>,
       <>
-        The final model was refit on the full dataset and exported via{" "}
-        <InlineLink href="https://github.com/BayesWitnesses/m2cgen">m2cgen</InlineLink> to run
-        entirely in the browser. The interactive demo above is the real model, not a mockup, and
-        it openly discloses known quirks like non-monotonic behavior on heart rate rather than
-        hiding them.
+        I kept oversampling inside each validation fold and used{" "}
+        <ResearchLink href="https://scikit-learn.org/stable/modules/cross_validation.html">
+          stratified cross-validation
+        </ResearchLink>
+        . Average ROC-AUC scores of 0.791 and 0.812 did not justify a clear
+        winner on such a small sample. I then exported the fitted model to run
+        in the browser, where visitors can explore its predictions and
+        limitations. The takeaway was to{" "}
+        <strong>show uncertainty alongside the result</strong>, including
+        unexpected changes as heart rate varies. This remains a portfolio
+        experiment, not a clinical decision tool.
       </>,
     ],
   },
   {
-    kind: "writeup",
     slug: "agrioptima-ai",
-    title: "AgriOptima AI: Crop Recommendation Backend",
-    icons: [
+    name: "AgriOptima AI",
+    title: "Making the journey from farm to buyer visible",
+    links: [
+      { label: "SIH brief", href: "https://www.sih.gov.in/sih2026PS" },
       {
         href: "https://github.com/Sam02i/agrioptima-ai",
         label: "GitHub",
@@ -256,177 +250,186 @@ const projects: (WriteupProject | SimpleProject)[] = [
         label: "Live Demo",
       },
     ],
-    intro: (
-      <>
-        A team project building a crop recommendation backend that helps a farmer choose a viable
-        crop: deterministic agronomic eligibility first (season, soil pH, water, budget, crop
-        rotation), then a transparent, source-labelled{" "}
-        <strong className="font-semibold text-foreground">0–100 scoring system</strong> layered on
-        top. Live weather and market data can influence the ranking, but can never override a hard
-        agronomic rejection.
-      </>
-    ),
+    intro:
+      "For a farmer, preparing produce is only part of the journey. Our SIH 2026 team project takes on the uncertainty around what happens next: finding a buyer, following an order, and seeing its progress.",
     image: agrioptimaCover,
     imageWidth: 1800,
     imageHeight: 912,
-    imageAlt: "AgriOptima AI landing page, a smart farming platform for crop recommendations",
-    caption: "The live AgriOptima AI landing page: the platform's public-facing frontend.",
+    imageAlt:
+      "AgriOptima AI landing page, a smart farming platform for crop recommendations",
+    caption:
+      "AgriOptima’s public-facing landing page, leading into farmer and buyer workspaces.",
     body: [
       <>
-        Given a farmer&rsquo;s soil, irrigation, season, budget, and location, the system runs six
-        candidate crops through{" "}
-        <strong className="font-semibold text-foreground">hard eligibility rules</strong>, rejects
-        the ones that fail with plain-language reasons, then scores the remaining eligible crops
-        using a fixed-weight formula covering soil fit, climate fit, water fit, and market
-        factors. Live weather comes from{" "}
-        <InlineLink href="https://open-meteo.com/">Open-Meteo</InlineLink> and mandi price data
-        from{" "}
-        <InlineLink href="https://agmarknet.gov.in/">data.gov.in / AGMARKNET</InlineLink>, and
-        when either is unavailable, the system falls back to a clearly labelled neutral estimate
-        instead of guessing.
+        The{" "}
+        <ResearchLink href="https://www.sih.gov.in/sih2026PS">
+          SIH 2026 problem statement, SIH26032
+        </ResearchLink>
+        , highlights farmers’ long waits, unclear procurement schedules, and
+        uncertainty about procurement status. It calls for registration, arrival
+        slots, live queues, notifications, and procurement and payment tracking.
+        Our team’s work centres on{" "}
+        <strong>
+          making the journey from farmer to buyer easier to follow
+        </strong>
+        , connecting guidance, produce listings, buyer comparisons, and orders
+        in one workflow.
       </>,
       <>
-        The backend (data models, the eligibility engine, the scoring formula, and both external
-        data adapters) is built and covered by automated tests using a{" "}
-        <strong className="font-semibold text-foreground">FastAPI</strong> service layer over a
-        Dockerized PostgreSQL database; the API endpoint and frontend are still{" "}
-        <strong className="font-semibold text-foreground">in progress</strong>.
+        Shared records help both sides see what has happened, while visible
+        sources distinguish confirmed information from estimates. The current
+        project includes{" "}
+        <strong>
+          farmer and buyer workspaces with order, shipment, inspection, and
+          payment visibility
+        </strong>
+        . Slot booking, live queues, and notifications remain requirements of
+        the brief rather than features claimed as complete here. The design
+        question throughout is whether someone can understand the next step and
+        the evidence behind it.
       </>,
     ],
   },
   {
-    kind: "simple",
     slug: "task-receipts",
-    title: "Task Receipts",
+    name: "Task Receipts",
+    title: "A finished task deserves more than a disappearing checkbox.",
     image: taskReceiptsCover,
     imageWidth: 1800,
     imageHeight: 1019,
-    alt: "Task Receipts, a retro receipt-printer styled session and task tracker",
-    description: (
+    imageAlt:
+      "Task Receipts, a retro receipt-printer styled session and task tracker",
+    intro:
+      "A to-do list keeps your unfinished work in view. Task Receipts gives completed work a moment of its own: a focus session ends with a printable record of what you did.",
+    caption:
+      "The receipt-inspired interface turns a session summary into a keepsake.",
+    body: [
       <>
-        A playful productivity tool styled like a retro receipt printer: track ongoing and
-        completed tasks, run{" "}
-        <strong className="font-semibold text-foreground">timed focus sessions</strong>, and print
-        out a session summary receipt at the end, complete with customizable paper colors,
-        dot-matrix filters, and app themes.
-      </>
-    ),
+        When a task list keeps the focus on what is left, completed work can be
+        easy to overlook. I built the experience around{" "}
+        <strong>a focus session that ends with a printable receipt</strong>:
+        track tasks, run the timer, and leave with a record of what happened.
+        The receipt-printer idea carries through paper colors, dot-matrix
+        filters, and themes, giving the end of a session its own visual
+        identity.
+      </>,
+      <>
+        The live tool turns a routine summary into{" "}
+        <strong>something you can keep after the session ends</strong>. Its
+        value is in how those small interactions fit together: starting with a
+        task, staying with a timed session, and finishing with a clear record of
+        progress. The design makes completion a visible part of the experience
+        rather than letting it disappear with a checked box.
+      </>,
+    ],
     links: [
       { label: "Live Demo", href: "https://task-receipts-phi.vercel.app/" },
       { label: "GitHub", href: "https://github.com/Sam02i/Task-Receipts" },
     ],
   },
   {
-    kind: "simple",
     slug: "anime-recommender",
-    title: "Anime Recommender",
+    name: "Anime Recommender",
+    title: "Less time choosing. More time watching.",
     image: animeRecommenderCover,
     imageWidth: 1200,
     imageHeight: 900,
-    alt: "Anime Recommender, a full-stack recommendation platform using AniList and MyAnimeList APIs",
-    description: (
+    imageAlt:
+      "Anime Recommender, a full-stack recommendation platform using AniList and MyAnimeList APIs",
+    intro:
+      "An endless catalog can make choosing the next anime feel like work. Anime Recommender starts with viewer preferences to help narrow that decision.",
+    caption:
+      "The recommendation interface brings preferences and anime catalog data together.",
+    body: [
       <>
-        A full-stack anime recommendation platform with a{" "}
-        <strong className="font-semibold text-foreground">React</strong> front end, integrating
-        live data from the <InlineLink href="https://anilist.co/">AniList</InlineLink> and{" "}
-        <InlineLink href="https://myanimelist.net/">MyAnimeList</InlineLink> (MAL) APIs to deliver
-        personalized, real-time recommendations based on user preferences.
-      </>
-    ),
-    links: [{ label: "GitHub", href: "https://github.com/Sam02i/Anime-Recommender" }],
+        A large catalog is only useful if someone can find a starting point. I
+        connected viewer preferences with live information from{" "}
+        <ResearchLink href="https://anilist.co/">AniList</ResearchLink> and{" "}
+        <ResearchLink href="https://myanimelist.net/">MyAnimeList</ResearchLink>
+        , bringing discovery into one interface. The aim is{" "}
+        <strong>
+          to turn a broad catalog into a more relevant next choice
+        </strong>
+        , without making the viewer piece together information across services.
+      </>,
+      <>
+        The resulting platform offers{" "}
+        <strong>personalized recommendations grounded in those catalogs</strong>
+        . The repository shows how the interface and data integrations come
+        together, with user preferences guiding the experience. There is no
+        public demo linked yet, so the code is the available way to explore the
+        project and the decisions behind it.
+      </>,
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/Sam02i/Anime-Recommender" },
+    ],
   },
 ];
 
 function Projects() {
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-[1400px] px-8 pb-24 pt-16">
-        <h1 className="animate-rise-in text-center text-5xl font-extrabold tracking-tight sm:text-7xl">
+      <section className="mx-auto max-w-5xl px-6 pb-24 pt-16 sm:px-8">
+        <h1 className="animate-rise-in text-5xl font-extrabold tracking-tight sm:text-7xl">
           Projects.
         </h1>
-
-        <div className="mt-14 space-y-24">
-          {projects.map((project, i) =>
-            project.kind === "writeup" ? (
-              <article
-                key={project.title}
-                id={project.slug}
-                className="animate-rise-in mx-auto max-w-4xl scroll-mt-24"
-                style={{ animationDelay: `${120 + i * 120}ms` }}
-              >
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{project.title}</h2>
-                  <div className="flex shrink-0 items-center gap-3">
-                    {project.icons.map((iconLink) => (
-                      <ProjectIconLink key={iconLink.label} {...iconLink} />
-                    ))}
-                  </div>
+        <div className="mt-16 space-y-20">
+          {projects.map((project) => (
+            <article
+              key={project.slug}
+              id={project.slug}
+              className="scroll-mt-12 border-t border-border pt-8"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                <div className="flex min-w-0 flex-wrap items-center gap-3">
+                  <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                    {project.name}
+                  </h2>
+                  {project.inProgress && (
+                    <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+                      In progress
+                    </span>
+                  )}
                 </div>
-
-                <p className="mt-4 text-sm leading-relaxed text-foreground/80">{project.intro}</p>
-
-                <div className="group mt-6 overflow-hidden rounded-2xl border border-border bg-card p-4">
+                <nav
+                  aria-label={`${project.name} resources`}
+                  className="ml-auto flex shrink-0 flex-nowrap items-center justify-end gap-1 sm:gap-2"
+                >
+                  {project.links.map((link) => (
+                    <ProjectIconLink key={link.label} {...link} />
+                  ))}
+                </nav>
+              </div>
+              <p className="mt-5 text-xl font-semibold leading-snug tracking-tight sm:text-2xl">
+                {project.title}
+              </p>
+              <p className="mt-4 text-base leading-relaxed text-foreground/80 sm:text-lg">
+                {project.intro}
+              </p>
+              <figure className="mt-7">
+                <div className="overflow-hidden rounded-2xl border border-border bg-card p-3 sm:p-5">
                   <FadeImage
                     src={project.image}
                     alt={project.imageAlt}
                     width={project.imageWidth}
                     height={project.imageHeight}
                     loading="lazy"
-                    wrapperClassName="aspect-[16/9] w-full rounded-lg"
-                    className="h-full w-full rounded-lg object-contain transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  />
-                </div>
-                <p className="mt-3 text-center text-xs italic text-muted-foreground">
-                  {project.caption}
-                </p>
-
-                {project.body.map((paragraph, pi) => (
-                  <p key={pi} className="mt-4 text-sm leading-relaxed text-foreground/80">
-                    {paragraph}
-                  </p>
-                ))}
-              </article>
-            ) : (
-              <article
-                key={project.title}
-                id={project.slug}
-                className="animate-rise-in mx-auto max-w-4xl scroll-mt-24"
-                style={{ animationDelay: `${120 + i * 120}ms` }}
-              >
-                <div className="relative flex items-center justify-center gap-3">
-                  <h2 className="text-center text-2xl font-semibold tracking-tight sm:text-3xl">
-                    {project.title}
-                  </h2>
-                  {project.inProgress && (
-                    <span className="rounded-full border border-border bg-secondary px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      In Progress
-                    </span>
-                  )}
-                  {project.links.length > 0 && (
-                    <div className="absolute right-0 flex items-center gap-3">
-                      {project.links.map((link) => (
-                        <ProjectIconLink key={link.label} {...link} />
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="group mt-6 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-                  <FadeImage
-                    src={project.image}
-                    alt={project.alt}
-                    width={project.imageWidth}
-                    height={project.imageHeight}
-                    loading="lazy"
                     wrapperClassName="aspect-[16/9] w-full"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    className="h-full w-full object-contain"
                   />
                 </div>
-                <p className="mt-6 text-sm leading-relaxed text-foreground/80">
-                  {project.description}
-                </p>
-              </article>
-            ),
-          )}
+                <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {project.caption}
+                </figcaption>
+              </figure>
+              <div className="mt-7 space-y-5 text-base leading-8 text-foreground/80 [&_strong]:font-semibold [&_strong]:text-foreground">
+                {project.body.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </article>
+          ))}
         </div>
       </section>
     </SiteLayout>

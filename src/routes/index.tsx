@@ -23,7 +23,10 @@ export const Route = createFileRoute("/")({
         content:
           "Portfolio of Samiksha Tripathy, a machine learning engineer and CSE (AI & ML) undergraduate at SRM Institute of Science and Technology.",
       },
-      { property: "og:title", content: "Samiksha Tripathy — Machine Learning Engineer" },
+      {
+        property: "og:title",
+        content: "Samiksha Tripathy — Machine Learning Engineer",
+      },
       {
         property: "og:description",
         content:
@@ -39,6 +42,7 @@ export const Route = createFileRoute("/")({
 const projects = [
   {
     slug: "echofeather",
+    story: "Identifying a bird when you can hear it, see it, or both.",
     title: "EchoFeather.",
     image: birdSpeciesCover,
     alt: "A keel-billed toucan overlaid with a neural network graph, representing the EchoFeather bird species identification project",
@@ -46,20 +50,25 @@ const projects = [
   },
   {
     slug: "cache-management",
-    title: "Cache Management\nStrategy Research.",
+    story: "Does a smarter cache policy justify the extra complexity?",
+    title: "When simple\nworks better.",
     image: cacheCover,
     alt: "Chart comparing hit rate vs cache size for LRU, LFU, and ML-based eviction policies",
     github: "https://github.com/Sam02i/Cache-Eviction-Analysis",
   },
   {
     slug: "transfusion-need",
-    title: "Predictive Analytics for\nTransfusion Need.",
+    story: "What data leakage taught me about trusting a prediction.",
+    title: "Can we trust\nthe prediction?",
     image: transfusionCover,
     alt: "Live result screen from the trained Random Forest model estimating transfusion risk, showing a 68% elevated risk gauge",
-    github: "https://github.com/Sam02i/Predictive-Analytics-for-Transfusion-Need",
+    github:
+      "https://github.com/Sam02i/Predictive-Analytics-for-Transfusion-Need",
   },
   {
     slug: "agrioptima-ai",
+    story:
+      "Our SIH 2026 project: making the journey from farm to buyer easier to follow.",
     title: "AgriOptima AI.",
     image: agrioptimaCover,
     alt: "AgriOptima AI, a rule-based crop recommendation backend",
@@ -67,6 +76,7 @@ const projects = [
   },
   {
     slug: "task-receipts",
+    story: "Turning completed work into a receipt worth keeping.",
     title: "Task Receipts.",
     image: taskReceiptsCover,
     alt: "Task Receipts, a retro receipt-printer styled session and task tracker",
@@ -74,6 +84,7 @@ const projects = [
   },
   {
     slug: "anime-recommender",
+    story: "Helping viewers narrow down what to watch next.",
     title: "Anime\nRecommender.",
     image: animeRecommenderCover,
     alt: "Anime Recommender, a full-stack recommendation platform using AniList and MyAnimeList APIs",
@@ -132,18 +143,20 @@ function Index() {
           >
             I&rsquo;m Samiksha Tripathy,
             <br />a Machine Learning
-            <br />Engineer.
+            <br />
+            Engineer.
           </h1>
 
           <p
             className="animate-rise-in mx-auto mt-4 max-w-xl text-sm leading-relaxed text-foreground/90"
             style={{ animationDelay: "200ms" }}
           >
-            I&rsquo;m a Computer Science &amp; Engineering student at SRM University of Science and
-            Technology, specializing in Artificial Intelligence and Machine Learning, looking to
-            lower the barrier of entry to intelligent technology for all. I am primarily interested
-            in machine learning model design, deep learning system optimization, and applied AI for
-            real world problem solving.
+            I&rsquo;m a Computer Science &amp; Engineering student at SRM
+            University of Science and Technology, specializing in Artificial
+            Intelligence and Machine Learning, looking to lower the barrier of
+            entry to intelligent technology for all. I am primarily interested
+            in machine learning model design, deep learning system optimization,
+            and applied AI for real world problem solving.
           </p>
 
           <div
@@ -174,8 +187,13 @@ function Index() {
         </div>
       </section>
 
-      <div className="animate-rise-in -mt-6 flex flex-col items-center gap-1 pb-4 text-muted-foreground" style={{ animationDelay: "400ms" }}>
-        <span className="text-xs font-semibold uppercase tracking-widest">Scroll to see projects</span>
+      <div
+        className="animate-rise-in -mt-6 flex flex-col items-center gap-1 pb-4 text-muted-foreground"
+        style={{ animationDelay: "400ms" }}
+      >
+        <span className="text-xs font-semibold uppercase tracking-widest">
+          Scroll to see projects
+        </span>
         <ChevronDown className="animate-bounce" size={20} aria-hidden="true" />
       </div>
 
@@ -304,12 +322,15 @@ function ProjectCarousel() {
             <h3 className="mt-5 whitespace-pre-line text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
               {project.title}
             </h3>
+            <p className="mb-5 mt-3 text-sm leading-relaxed text-muted-foreground">
+              {project.story}
+            </p>
             <Link
               to="/projects"
               hash={project.slug}
               className="mt-auto inline-block w-fit rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Learn More
+              Read the story
             </Link>
           </article>
         ))}
