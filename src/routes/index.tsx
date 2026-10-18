@@ -13,6 +13,7 @@ import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
 import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
+import loreLabCover from "@/assets/lore-lab-cover.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,6 +41,14 @@ export const Route = createFileRoute("/")({
 // Add more entries here as new projects are written up — the carousel and
 // its arrow buttons already handle any number of cards.
 const projects = [
+  {
+    slug: "lore-lab",
+    story: "Is the old weather saying actually right? I tested it against ten years of data.",
+    title: "Lore Lab.",
+    image: loreLabCover,
+    alt: "Lore Lab, a chalkboard-style site that tests folk weather sayings against ten years of real weather data",
+    github: "https://github.com/Sam02i/Lore-Lab",
+  },
   {
     slug: "echofeather",
     story: "Identifying a bird when you can hear it, see it, or both.",

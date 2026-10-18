@@ -10,6 +10,7 @@ import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
 import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
+import loreLabCover from "@/assets/lore-lab-cover.png";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -97,6 +98,48 @@ function ProjectIconLink({ href, label }: IconLink) {
 }
 
 const projects: Project[] = [
+  {
+    slug: "lore-lab",
+    name: "Lore Lab",
+    title: "Red sky at night, shepherd's delight. But is it true?",
+    image: loreLabCover,
+    imageWidth: 1657,
+    imageHeight: 949,
+    imageAlt:
+      "Lore Lab, a chalkboard-style site that tests folk weather sayings against ten years of real weather data",
+    intro:
+      "Everyone has a family weather saying. Lore Lab turns one into a fair test: it pins down what the saying predicts, checks it against ten years of real weather, and gives an honest verdict.",
+    caption:
+      "The Lore Lab home page, where a visitor can type a saying or run one of the examples.",
+    body: [
+      <>
+        A saying like “red sky at night” is easy to repeat and hard to check. I
+        built Lore Lab so that{" "}
+        <strong>
+          a language model reads the saying, plain code decides how to test it,
+          and the person chooses every number
+        </strong>
+        . The result is compared with{" "}
+        <strong>how often that weather happens anyway</strong>, because a saying
+        only means something if it beats the baseline. Each result shows its
+        hit rate with an uncertainty range, and a verdict of promising, same as
+        chance, or backfires.
+      </>,
+      <>
+        Some signs, like cows lying down, cannot be seen by weather
+        instruments. For those, Lore Lab becomes a field notebook:{" "}
+        <strong>you look outside, log what you saw, and the app checks the sky
+        for you later</strong>. Lab tests and outdoor looks are never mixed, and
+        a verdict stays locked until there is enough evidence. The aim is a
+        result that says what the data supports and what it cannot show. One
+        place and one rule is a hint, not proof.
+      </>,
+    ],
+    links: [
+      { label: "Live Demo", href: "https://lore-lab.onrender.com/" },
+      { label: "GitHub", href: "https://github.com/Sam02i/Lore-Lab" },
+    ],
+  },
   {
     slug: "echofeather",
     name: "EchoFeather",
