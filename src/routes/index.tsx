@@ -219,7 +219,7 @@ const RESUME_DELAY_MS = 2500;
 function ProjectCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const pause = () => {
     isPausedRef.current = true;
