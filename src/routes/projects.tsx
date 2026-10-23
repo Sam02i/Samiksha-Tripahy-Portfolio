@@ -4,13 +4,13 @@ import { ExternalLink } from "lucide-react";
 import { SiGithub, SiJupyter } from "react-icons/si";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeImage } from "@/components/FadeImage";
-import cacheChart from "@/assets/hit-rate-chart.png";
-import transfusionResult from "@/assets/transfusion-hero.png";
-import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
-import birdFinderCover from "@/assets/birdfinder-cover.png";
-import taskReceiptsCover from "@/assets/task-receipts-cover.png";
-import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
-import loreLabCover from "@/assets/lore-lab-cover.png";
+import cacheChart from "@/assets/hit-rate-chart.webp";
+import transfusionResult from "@/assets/transfusion-hero.webp";
+import agrioptimaCover from "@/assets/agrioptima-cover.webp";
+import birdFinderCover from "@/assets/birdfinder-cover.webp";
+import taskReceiptsCover from "@/assets/task-receipts-cover.webp";
+import animeRecommenderCover from "@/assets/anime-recommender-cover.webp";
+import loreLabCover from "@/assets/lore-lab-cover.webp";
 
 export const Route = createFileRoute("/projects")({
   head: () => ({
@@ -81,7 +81,7 @@ function ProjectIconLink({ href, label }: IconLink) {
       rel={isNotebook ? undefined : "noreferrer noopener"}
       aria-label={label}
       title={label}
-      className="inline-flex h-10 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-2 text-xs font-medium transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm"
+      className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md px-1.5 text-xs font-medium transition-colors hover:bg-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:text-sm"
     >
       {isGithub ? (
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-foreground text-background">
@@ -101,41 +101,35 @@ const projects: Project[] = [
   {
     slug: "lore-lab",
     name: "Lore Lab",
-    title: "Red sky at night, shepherd's delight. But is it true?",
+    title: "A weather saying looked convincing. Then I checked the monsoon.",
     image: loreLabCover,
     imageWidth: 1657,
     imageHeight: 949,
     imageAlt:
-      "Lore Lab, a chalkboard-style site that tests folk weather sayings against ten years of real weather data",
+      "Lore Lab frontend, with a chalkboard-style interface for testing weather sayings",
     intro:
-      "Everyone has a family weather saying. Lore Lab turns one into a fair test: it pins down what the saying predicts, checks it against ten years of real weather, and gives an honest verdict.",
+      "I built Lore Lab to turn weather folklore into testable claims. The harder part was deciding whether a saying added information beyond the weather that was likely anyway.",
     caption:
-      "The Lore Lab home page, where a visitor can type a saying or run one of the examples.",
+      "The Lore Lab homepage, where visitors can enter a weather saying or try an example.",
     body: [
       <>
-        A saying like “red sky at night” is easy to repeat and hard to check. I
-        built Lore Lab so that{" "}
+        I separated interpretation from evaluation:{" "}
         <strong>
-          a language model reads the saying, plain code decides how to test it,
-          and the person chooses every number
+          the language model proposes a hypothesis, the user approves its
+          thresholds, and code scores it
         </strong>
-        . The result is compared with{" "}
-        <strong>how often that weather happens anyway</strong>, because a saying
-        only means something if it beats the baseline. Each result shows its hit
-        rate with an uncertainty range, and a verdict of promising, same as
-        chance, or backfires.
+        . Ten years of weather data provide the comparison; signs that weather
+        instruments cannot observe go into a separate field notebook. That keeps
+        an appealing explanation from becoming its own evidence.
       </>,
       <>
-        Some signs, like cows lying down, cannot be seen by weather instruments.
-        For those, Lore Lab becomes a field notebook:{" "}
-        <strong>
-          you look outside, log what you saw, and the app checks the sky for you
-          later
-        </strong>
-        . Lab tests and outdoor looks are never mixed, and a verdict stays
-        locked until there is enough evidence. The aim is a result that says
-        what the data supports and what it cannot show. One place and one rule
-        is a hint, not proof.
+        In the Delhi south-wind test, rain followed{" "}
+        <strong>128 of 303 sign-present days: a 42% hit rate</strong>. The
+        overall rain baseline was 19%, but rose to 30% when matched by month.
+        Accounting for season reduced the apparent lift from about{" "}
+        <strong>2.2× to 1.4×</strong>. The result stayed promising, with limits:
+        one city, a rough proxy, modelled weather, and correlated days. The
+        original scorecard and season check are documented in the repository.
       </>,
     ],
     links: [
@@ -146,34 +140,35 @@ const projects: Project[] = [
   {
     slug: "echofeather",
     name: "BirdFinder",
-    title: "You hear the bird. But what is it?",
+    title: "From a photo or a call to five possible birds.",
     image: birdFinderCover,
     imageWidth: 2902,
     imageHeight: 1674,
     imageAlt:
       "BirdFinder homepage with a mosaic bird and photo and sound identification navigation",
     intro:
-      "A bird call can be the only clue you get. BirdFinder explores how a recorded call or a photograph can turn that fleeting encounter into a possible identification.",
+      "I built BirdFinder’s photo and audio identification experience around a practical question: how do you present a useful suggestion when a model can still be wrong?",
     caption:
       "The live BirdFinder homepage, with photo and sound identification paths.",
     body: [
       <>
-        A clear photograph is not always available, and a sound alone can be
-        difficult to identify. I’m building BirdFinder around{" "}
-        <strong>
-          two ways to recognize the same bird: a photograph or a recorded call
-        </strong>
-        . Both paths lead to three possible species with confidence scores,
-        making uncertainty part of the experience instead of forcing a single
-        answer.
+        The app connects photo uploads and recorded calls to separate models,
+        with previews, playback, and{" "}
+        <strong>five ranked species suggestions</strong>. The photo model
+        supports 20 species and the audio model 19. For audio training,
+        recordings were split before spectrogram generation, keeping chunks of
+        the same recording out of different splits.
       </>,
       <>
-        The live demo is now available to explore. Further evaluation will focus
-        on comparing its performance against{" "}
-        <ResearchLink href="https://birdnet.cornell.edu/">BirdNET</ResearchLink>
-        . I want to understand where each input helps and where it falls short.
-        The goal is <strong>a useful identification someone can assess</strong>,
-        with alternatives they can explore when the evidence is unclear.
+        On <strong>80 readable test recordings</strong>, audio achieved{" "}
+        <strong>30% top-1 and 66.25% top-5 accuracy</strong>; one short
+        recording was skipped. These are experimental results, not field
+        reliability. The scores are uncalibrated model outputs, and an
+        unsupported species can still receive a confident match. A{" "}
+        <ResearchLink href="https://birdnet.cornell.edu/">BirdNET</ResearchLink>{" "}
+        comparison has not yet been run. The live demo makes the interface
+        explorable while the local evaluation gives its performance a concrete
+        boundary.
       </>,
     ],
     links: [
@@ -182,9 +177,58 @@ const projects: Project[] = [
     ],
   },
   {
+    slug: "agrioptima-ai",
+    name: "AgriOptima AI",
+    title: "Connecting soil advice to the rest of a farmer’s workflow.",
+    links: [
+      { label: "SIH brief", href: "https://www.sih.gov.in/sih2026PS" },
+      {
+        href: "https://github.com/Sam02i/agrioptima-ai",
+        label: "GitHub",
+      },
+      {
+        href: "https://agrioptima-ai.vercel.app/",
+        label: "Live Demo",
+      },
+    ],
+    intro:
+      "As backend lead for our SIH 2026 team, I built the soil recommendation engine and connected the models into the wider AgriOptima application.",
+    image: agrioptimaCover,
+    imageWidth: 1800,
+    imageHeight: 912,
+    imageAlt:
+      "AgriOptima AI landing page, a smart farming platform for crop recommendations",
+    caption:
+      "AgriOptima’s public-facing landing page, leading into farmer and buyer workspaces.",
+    body: [
+      <>
+        My responsibility was{" "}
+        <strong>the soil recommendation engine and model integration</strong>.
+        The backend brings that work into a shared farmer-and-buyer workflow
+        with guidance, listings, orders, and delivery records. A key design
+        choice is to distinguish confirmed information, external data, model
+        predictions, and estimates so users can understand the evidence behind
+        the advice.
+      </>,
+      <>
+        Our{" "}
+        <ResearchLink href="https://www.sih.gov.in/sih2026PS">
+          SIH26032 brief
+        </ResearchLink>{" "}
+        addresses long waits and unclear procurement status. The current
+        application provides{" "}
+        <strong>order, shipment, inspection, and payment visibility</strong>;
+        the soil engine supports the broader farmer workflow. Arrival-slot
+        booking, live queues, and notifications are separate brief requirements,
+        not completed features claimed here. This makes the connection to the
+        challenge—and the remaining work—explicit.
+      </>,
+    ],
+  },
+  {
     slug: "cache-management",
     name: "Cache Eviction Research",
-    title: "When a simpler cache policy holds its own",
+    title: "A simpler policy matched the model—and made decisions faster.",
     links: [
       {
         href: "/notebooks/cache_eviction_analysis.html",
@@ -196,7 +240,7 @@ const projects: Project[] = [
       },
     ],
     intro:
-      "When a cache fills up, what should it forget? I explored whether a learned policy could make better eviction decisions than simple rules. The most useful result was a tradeoff: on this workload, the extra complexity bought very little.",
+      "I tested whether learned cache eviction earned its extra complexity. On this synthetic workload, frequency tracking was both competitive and much cheaper per decision.",
     image: cacheChart,
     imageWidth: 1050,
     imageHeight: 675,
@@ -210,29 +254,29 @@ const projects: Project[] = [
         <ResearchLink href="https://redis.io/docs/latest/develop/reference/eviction/">
           recency-based and frequency-based eviction
         </ResearchLink>{" "}
-        with a learned policy on a synthetic workload dominated by a small
-        number of popular items. At a cache size of 10, the frequency-based
-        policy achieved{" "}
-        <strong>56.1% hit rate versus 55.9% for the model</strong>, while being
-        roughly <strong>14,000 times faster per eviction decision</strong> in
-        this experiment. A burst of sequential accesses also let me explore what
-        happens when the usual access pattern is interrupted.
+        with a learned policy on a trace dominated by a few popular items. At
+        cache size 10, frequency tracking achieved{" "}
+        <strong>56.1% hit rate versus 55.9% for the model</strong>, with roughly{" "}
+        <strong>14,000× faster eviction decisions</strong> in this experiment. I
+        also introduced a sequential-access burst to examine how the policies
+        handled an interruption.
       </>,
       <>
-        The result changed the emphasis of the project:{" "}
-        <strong>extra model complexity needs to earn its place</strong>.
-        Frequency tracking held up well when popularity stayed stable; shifting
-        workloads remain a question for further testing. Because the learned
-        policy uses oracle look-ahead features, this is an offline experiment
-        rather than a deployable cache benchmark. That boundary matters as much
-        as the score.
+        The result supports a specific engineering choice:{" "}
+        <strong>
+          start with the inexpensive baseline when popularity is stable
+        </strong>
+        . It does not establish performance on shifting real-world traffic. The
+        learned policy uses oracle look-ahead features, making this an offline
+        comparison rather than a production-ready benchmark. The notebook and
+        chart expose both the result and the scope of that conclusion.
       </>,
     ],
   },
   {
     slug: "transfusion-need",
     name: "Transfusion Risk Checker",
-    title: "Learning to question a promising prediction",
+    title: "The most important result was finding the leakage.",
     links: [
       {
         href: "/notebooks/Pred_Analytics_for_Transfusion.html",
@@ -248,7 +292,7 @@ const projects: Project[] = [
       },
     ],
     intro:
-      "Could routine patient measurements help estimate transfusion need? Working with a demo dataset of 206 patients, I found that the harder problem was making the evaluation trustworthy. This project became a story about questioning the data before trusting the score.",
+      "I built a transfusion-risk experiment from routine patient measurements, then traced misleading results back to the data pipeline before trusting the model comparison.",
     image: transfusionResult,
     imageWidth: 1800,
     imageHeight: 1019,
@@ -258,117 +302,58 @@ const projects: Project[] = [
       "The browser-based demo makes the model’s output explorable. It is a portfolio experiment, not a clinical decision tool.",
     body: [
       <>
-        Working with <strong>206 patients and only 14 positive cases</strong>, I
-        uncovered two rounds of{" "}
+        The demo dataset contained{" "}
+        <strong>206 patients, with only 14 positive cases</strong>. I found two
+        rounds of{" "}
         <ResearchLink href="https://scikit-learn.org/stable/common_pitfalls.html#data-leakage">
           data leakage
         </ResearchLink>{" "}
-        and a database join that multiplied rows. I traced the join to a missing
-        row key, reduced the data to one row per patient stay, and excluded
-        columns that defined the predicted outcome. The important work became{" "}
-        <strong>making the evaluation trustworthy</strong> before comparing
-        models.
+        and a join that multiplied rows. Fixing the missing row key, aggregating
+        to one row per stay, and excluding outcome-defining columns made the
+        evaluation more defensible.
       </>,
       <>
-        I kept oversampling inside each validation fold and used{" "}
+        I kept oversampling inside each fold of{" "}
         <ResearchLink href="https://scikit-learn.org/stable/modules/cross_validation.html">
           stratified cross-validation
         </ResearchLink>
-        . Average ROC-AUC scores of 0.791 and 0.812 did not justify a clear
-        winner on such a small sample. I then exported the fitted model to run
-        in the browser, where visitors can explore its predictions and
-        limitations. The takeaway was to{" "}
-        <strong>show uncertainty alongside the result</strong>, including
-        unexpected changes as heart rate varies. This remains a portfolio
-        experiment, not a clinical decision tool.
-      </>,
-    ],
-  },
-  {
-    slug: "agrioptima-ai",
-    name: "AgriOptima AI",
-    title: "Making the journey from farm to buyer visible",
-    links: [
-      { label: "SIH brief", href: "https://www.sih.gov.in/sih2026PS" },
-      {
-        href: "https://github.com/Sam02i/agrioptima-ai",
-        label: "GitHub",
-      },
-      {
-        href: "https://agrioptima-ai.vercel.app/",
-        label: "Live Demo",
-      },
-    ],
-    intro:
-      "For a farmer, preparing produce is only part of the journey. Our SIH 2026 team project takes on the uncertainty around what happens next: finding a buyer, following an order, and seeing its progress.",
-    image: agrioptimaCover,
-    imageWidth: 1800,
-    imageHeight: 912,
-    imageAlt:
-      "AgriOptima AI landing page, a smart farming platform for crop recommendations",
-    caption:
-      "AgriOptima’s public-facing landing page, leading into farmer and buyer workspaces.",
-    body: [
-      <>
-        The{" "}
-        <ResearchLink href="https://www.sih.gov.in/sih2026PS">
-          SIH 2026 problem statement, SIH26032
-        </ResearchLink>
-        , highlights farmers’ long waits, unclear procurement schedules, and
-        uncertainty about procurement status. It calls for registration, arrival
-        slots, live queues, notifications, and procurement and payment tracking.
-        Our team’s work centres on{" "}
-        <strong>
-          making the journey from farmer to buyer easier to follow
-        </strong>
-        , connecting guidance, produce listings, buyer comparisons, and orders
-        in one workflow.
-      </>,
-      <>
-        Shared records help both sides see what has happened, while visible
-        sources distinguish confirmed information from estimates. The current
-        project includes{" "}
-        <strong>
-          farmer and buyer workspaces with order, shipment, inspection, and
-          payment visibility
-        </strong>
-        . Slot booking, live queues, and notifications remain requirements of
-        the brief rather than features claimed as complete here. The design
-        question throughout is whether someone can understand the next step and
-        the evidence behind it.
+        . Mean ROC-AUC scores of 0.791 and 0.812 were too close to declare a
+        winner on this small sample. I exported the fitted model to JavaScript
+        for a <strong>working browser demo</strong>, with its uncertainty and
+        unexpected heart-rate behaviour disclosed. It demonstrates the pipeline;
+        it is not a clinical decision tool.
       </>,
     ],
   },
   {
     slug: "task-receipts",
     name: "Task Receipts",
-    title: "A finished task deserves more than a disappearing checkbox.",
+    title: "Make completed work visible.",
     image: taskReceiptsCover,
     imageWidth: 1800,
     imageHeight: 1019,
     imageAlt:
       "Task Receipts, a retro receipt-printer styled session and task tracker",
     intro:
-      "A to-do list keeps your unfinished work in view. Task Receipts gives completed work a moment of its own: a focus session ends with a printable record of what you did.",
+      "I built Task Receipts around the end of a focus session: a timer stops, completed tasks become a receipt, and the user leaves with a record of their work.",
     caption:
       "The receipt-inspired interface turns a session summary into a keepsake.",
     body: [
       <>
-        When a task list keeps the focus on what is left, completed work can be
-        easy to overlook. I built the experience around{" "}
-        <strong>a focus session that ends with a printable receipt</strong>:
-        track tasks, run the timer, and leave with a record of what happened.
-        The receipt-printer idea carries through paper colors, dot-matrix
-        filters, and themes, giving the end of a session its own visual
-        identity.
+        I connected{" "}
+        <strong>task tracking, timed sessions, and a printable summary</strong>{" "}
+        in a single flow. The receipt-printer styling carries through paper
+        colors, dot-matrix filters, and themes, so the visual idea follows the
+        interaction rather than stopping at a landing page.
       </>,
       <>
-        The live tool turns a routine summary into{" "}
-        <strong>something you can keep after the session ends</strong>. Its
-        value is in how those small interactions fit together: starting with a
-        task, staying with a timed session, and finishing with a clear record of
-        progress. The design makes completion a visible part of the experience
-        rather than letting it disappear with a checked box.
+        The live demo shows the full journey from a task to its session receipt.
+        It is a finished interaction someone can try, rather than a claim of
+        measured productivity gains. The project demonstrates{" "}
+        <strong>
+          turning a small product idea into a coherent working experience
+        </strong>
+        .
       </>,
     ],
     links: [
@@ -379,35 +364,32 @@ const projects: Project[] = [
   {
     slug: "anime-recommender",
     name: "Anime Recommender",
-    title: "Less time choosing. More time watching.",
+    title: "Turn a large catalog into a manageable next choice.",
     image: animeRecommenderCover,
     imageWidth: 1200,
     imageHeight: 900,
     imageAlt:
       "Anime Recommender, a full-stack recommendation platform using AniList and MyAnimeList APIs",
     intro:
-      "An endless catalog can make choosing the next anime feel like work. Anime Recommender starts with viewer preferences to help narrow that decision.",
+      "I built a recommendation interface that starts with viewer preferences and brings anime catalog information into one place.",
     caption:
       "The recommendation interface brings preferences and anime catalog data together.",
     body: [
       <>
-        A large catalog is only useful if someone can find a starting point. I
-        connected viewer preferences with live information from{" "}
+        I integrated{" "}
         <ResearchLink href="https://anilist.co/">AniList</ResearchLink> and{" "}
-        <ResearchLink href="https://myanimelist.net/">MyAnimeList</ResearchLink>
-        , bringing discovery into one interface. The aim is{" "}
-        <strong>
-          to turn a broad catalog into a more relevant next choice
-        </strong>
-        , without making the viewer piece together information across services.
+        <ResearchLink href="https://myanimelist.net/">MyAnimeList</ResearchLink>{" "}
+        data with the interface to support{" "}
+        <strong>preference-based discovery</strong>. The task was to connect
+        those sources into a usable browsing experience so viewers could explore
+        recommendations without assembling the information themselves.
       </>,
       <>
-        The resulting platform offers{" "}
-        <strong>personalized recommendations grounded in those catalogs</strong>
-        . The repository shows how the interface and data integrations come
-        together, with user preferences guiding the experience. There is no
-        public demo linked yet, so the code is the available way to explore the
-        project and the decisions behind it.
+        The repository is the available evidence for the implementation; there
+        is no public demo linked yet. This project shows{" "}
+        <strong>interface development and API integration</strong>.
+        Recommendation quality has not been quantified here, so the story stays
+        focused on what was built.
       </>,
     ],
     links: [
@@ -419,7 +401,7 @@ const projects: Project[] = [
 function Projects() {
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-5xl px-6 pb-24 pt-16 sm:px-8">
+      <section className="mx-auto max-w-5xl px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
         <h1 className="animate-rise-in text-5xl font-extrabold tracking-tight sm:text-7xl">
           Projects.
         </h1>
@@ -430,7 +412,7 @@ function Projects() {
               id={project.slug}
               className="scroll-mt-12 border-t border-border pt-8"
             >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between lg:gap-6">
                 <div className="flex min-w-0 flex-wrap items-center gap-3">
                   <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
                     {project.name}
@@ -464,6 +446,7 @@ function Projects() {
                     width={project.imageWidth}
                     height={project.imageHeight}
                     loading="lazy"
+                    decoding="async"
                     wrapperClassName="aspect-[16/9] w-full"
                     className="h-full w-full object-contain"
                   />

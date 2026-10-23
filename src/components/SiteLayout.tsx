@@ -12,8 +12,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="relative w-full px-5 pb-6 pt-9">
-        <div className="grid grid-cols-1 place-items-center gap-3 sm:block">
-          <nav className="flex items-center justify-center gap-7 text-sm font-medium sm:absolute sm:left-6 sm:top-1/2 sm:-translate-y-1/2">
+        <div className="grid grid-cols-1 place-items-center gap-3 lg:block">
+          <nav className="flex items-center justify-center gap-7 text-sm font-medium lg:absolute lg:left-6 lg:top-1/2 lg:-translate-y-1/2">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
@@ -27,12 +27,12 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
           <Link
             to="/"
-            className="text-center text-base font-bold tracking-tight sm:absolute sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+            className="text-center text-base font-bold tracking-tight lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2"
           >
             Samiksha Tripathy&apos;s Portfolio
           </Link>
 
-          <div className="flex items-center justify-center gap-6 sm:absolute sm:right-6 sm:top-1/2 sm:-translate-y-1/2">
+          <div className="flex items-center justify-center gap-6 lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2">
             <a
               href="https://www.linkedin.com/in/samiksha-tripathy-399933328/"
               target="_blank"

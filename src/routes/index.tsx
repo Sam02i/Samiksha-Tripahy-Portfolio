@@ -1,19 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeImage } from "@/components/FadeImage";
 import portrait from "@/assets/samiksha.jpg";
 import sketchNeural from "@/assets/sketch-neural.png";
 import sketchChip from "@/assets/sketch-chip.png";
 import sketchArm from "@/assets/sketch-arm.png";
-import cacheCover from "@/assets/hit-rate-chart.png";
-import transfusionCover from "@/assets/transfusion-hero.png";
-import taskReceiptsCover from "@/assets/task-receipts-cover.png";
-import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
-import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
-import birdFinderCover from "@/assets/birdfinder-cover.png";
-import loreLabCover from "@/assets/lore-lab-cover.png";
+import cacheCover from "@/assets/hit-rate-chart.webp";
+import transfusionCover from "@/assets/transfusion-hero.webp";
+import taskReceiptsCover from "@/assets/task-receipts-cover.webp";
+import animeRecommenderCover from "@/assets/anime-recommender-cover.webp";
+import agrioptimaCover from "@/assets/agrioptima-cover.webp";
+import birdFinderCover from "@/assets/birdfinder-cover.webp";
+import loreLabCover from "@/assets/lore-lab-cover.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,36 +30,45 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Machine learning engineer building intelligent automation and neural systems for human spaceflight.",
+          "Machine learning projects with working demos, reproducible evaluations, and clear limits.",
       },
     ],
   }),
   component: Index,
 });
 
-// Add more entries here as new projects are written up — the carousel and
-// its arrow buttons already handle any number of cards.
+// Keep this order aligned with the project stories.
 const projects = [
   {
     slug: "lore-lab",
     story:
-      "Is the old weather saying actually right? I tested it against ten years of data.",
+      "A 42% rain hit rate looked promising. Matching by month changed the comparison.",
     title: "Lore Lab.",
     image: loreLabCover,
-    alt: "Lore Lab, a chalkboard-style site that tests folk weather sayings against ten years of real weather data",
+    alt: "Lore Lab frontend, with a chalkboard-style interface for testing weather sayings",
     github: "https://github.com/Sam02i/Lore-Lab",
   },
   {
     slug: "echofeather",
-    story: "Identifying a bird when you can hear it, see it, or both.",
+    story:
+      "Photo and audio identification, with five suggestions and an evaluated audio baseline.",
     title: "BirdFinder.",
     image: birdFinderCover,
     alt: "BirdFinder homepage with a mosaic bird and photo and sound identification navigation",
     github: "https://github.com/Sam02i/EchoFeather",
   },
   {
+    slug: "agrioptima-ai",
+    story:
+      "Backend lead: I built the soil recommendation engine and integrated the models.",
+    title: "AgriOptima AI.",
+    image: agrioptimaCover,
+    alt: "AgriOptima AI, a shared farmer and buyer application",
+    github: "https://github.com/Sam02i/agrioptima-ai",
+  },
+  {
     slug: "cache-management",
-    story: "Does a smarter cache policy justify the extra complexity?",
+    story: "56.1% versus 55.9% hit rate: the cheaper baseline held its own.",
     title: "When simple\nworks better.",
     image: cacheCover,
     alt: "Chart comparing hit rate vs cache size for LRU, LFU, and ML-based eviction policies",
@@ -74,15 +82,6 @@ const projects = [
     alt: "Live result screen from the trained Random Forest model estimating transfusion risk, showing a 68% elevated risk gauge",
     github:
       "https://github.com/Sam02i/Predictive-Analytics-for-Transfusion-Need",
-  },
-  {
-    slug: "agrioptima-ai",
-    story:
-      "Our SIH 2026 project: making the journey from farm to buyer easier to follow.",
-    title: "AgriOptima AI.",
-    image: agrioptimaCover,
-    alt: "AgriOptima AI, a rule-based crop recommendation backend",
-    github: "https://github.com/Sam02i/agrioptima-ai",
   },
   {
     slug: "task-receipts",
@@ -207,140 +206,45 @@ function Index() {
         <ChevronDown className="animate-bounce" size={20} aria-hidden="true" />
       </div>
 
-      <ProjectCarousel />
+      <ProjectGrid />
     </SiteLayout>
   );
 }
 
-// Auto-scroll speed in pixels per frame (~60fps). Small values keep the drift subtle.
-const AUTO_SCROLL_SPEED = 0.5;
-// How long a manual interaction (arrow click / touch) pauses auto-scroll before it resumes.
-const RESUME_DELAY_MS = 2500;
-
-function ProjectCarousel() {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
-
-  const pause = () => {
-    isPausedRef.current = true;
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-  };
-
-  const resume = (delay = 0) => {
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-    resumeTimeoutRef.current = setTimeout(() => {
-      isPausedRef.current = false;
-    }, delay);
-  };
-
-  const scrollByCard = (direction: 1 | -1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>("[data-carousel-card]");
-    const step = (card?.offsetWidth ?? 320) + 24; // card width + gap
-    pause();
-    track.scrollBy({ left: direction * step, behavior: "smooth" });
-    resume(RESUME_DELAY_MS);
-  };
-
-  // Drift the carousel on its own, looping seamlessly, unless the user is
-  // hovering, touching, or has just interacted with it.
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || projects.length <= 1) return;
-
-    let rafId: number;
-
-    const tick = () => {
-      if (!isPausedRef.current) {
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        if (maxScroll > 0) {
-          track.scrollLeft =
-            track.scrollLeft >= maxScroll - 1
-              ? 0
-              : track.scrollLeft + AUTO_SCROLL_SPEED;
-        }
-      }
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
+function ProjectGrid() {
   return (
-    <section className="relative mx-auto max-w-[1600px] px-8 pt-20 pb-24">
-      {projects.length > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={() => scrollByCard(-1)}
-            onMouseEnter={pause}
-            onMouseLeave={() => resume()}
-            aria-label="Previous project"
-            className="absolute left-2 top-[38%] z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 p-2 shadow-sm backdrop-blur transition-colors hover:bg-secondary sm:flex"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollByCard(1)}
-            onMouseEnter={pause}
-            onMouseLeave={() => resume()}
-            aria-label="Next project"
-            className="absolute right-2 top-[38%] z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-border bg-background/90 p-2 shadow-sm backdrop-blur transition-colors hover:bg-secondary sm:flex"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </>
-      )}
-
-      <div
-        ref={trackRef}
-        onMouseEnter={pause}
-        onMouseLeave={() => resume()}
-        onTouchStart={pause}
-        onTouchEnd={() => resume(RESUME_DELAY_MS)}
-        onWheel={() => {
-          pause();
-          resume(RESUME_DELAY_MS);
-        }}
-        className="flex items-stretch gap-6 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {projects.map((project, i) => (
-          <article
-            key={project.title}
-            data-carousel-card
-            className="animate-rise-in flex w-[260px] shrink-0 flex-col sm:w-[320px] lg:w-[360px]"
-            style={{ animationDelay: `${120 + i * 120}ms` }}
-          >
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="group block aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border bg-card p-3"
+    <section
+      aria-label="Project stories"
+      className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8"
+    >
+      <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
+        {projects.map((project) => (
+          <article key={project.slug} className="flex min-w-0 flex-col">
+            <Link
+              to="/projects"
+              hash={project.slug}
+              aria-label={`Read ${project.title.replace(/\n/g, " ")} project story`}
+              className="group block aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-card p-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               <FadeImage
                 src={project.image}
                 alt={project.alt}
                 loading="lazy"
+                decoding="async"
                 wrapperClassName="h-full w-full"
-                className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                className="h-full w-full object-contain transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.02]"
               />
-            </a>
-            <h3 className="mt-5 whitespace-pre-line text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
-              {project.title}
-            </h3>
-            <p className="mb-5 mt-3 text-sm leading-relaxed text-muted-foreground">
+            </Link>
+            <h2 className="mt-5 text-2xl font-bold leading-tight tracking-tight">
+              {project.title.replace(/\n/g, " ")}
+            </h2>
+            <p className="mb-6 mt-3 text-sm leading-7 text-muted-foreground">
               {project.story}
             </p>
             <Link
               to="/projects"
               hash={project.slug}
-              className="mt-auto inline-block w-fit rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90"
+              className="mt-auto inline-flex min-h-11 w-fit items-center rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               Read the story
             </Link>
