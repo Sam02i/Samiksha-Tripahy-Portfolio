@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ChevronDown } from "lucide-react";
+import { useRef } from "react";
+import { ChevronDown, ArrowLeft, ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { FadeImage } from "@/components/FadeImage";
 import portrait from "@/assets/samiksha.jpg";
@@ -176,19 +177,19 @@ function Index() {
               href="https://www.linkedin.com/in/samiksha-tripathy-399933328/"
               target="_blank"
               rel="noreferrer noopener"
-              className="rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
+              className="petal-button bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
             >
               LinkedIn
             </a>
             <Link
               to="/projects"
-              className="rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
+              className="petal-button bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
             >
               Projects
             </Link>
             <Link
               to="/resume"
-              className="rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
+              className="petal-button bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
             >
               Resume
             </Link>
@@ -206,25 +207,53 @@ function Index() {
         <ChevronDown className="animate-bounce" size={20} aria-hidden="true" />
       </div>
 
-      <ProjectGrid />
+      <ProjectCarousel />
     </SiteLayout>
   );
 }
 
-function ProjectGrid() {
+function ProjectCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  function move(direction: number) {
+    const track = trackRef.current;
+    const card = track?.querySelector("article");
+    if (!track || !card) return;
+    const end = track.scrollWidth - track.clientWidth;
+    const next =
+      direction > 0 && track.scrollLeft >= end - 2
+        ? 0
+        : direction < 0 && track.scrollLeft <= 2
+          ? end
+          : track.scrollLeft +
+            direction * (card.getBoundingClientRect().width + 24);
+    track.scrollTo({
+      left: next,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
+  }
   return (
     <section
       aria-label="Project stories"
-      className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8"
+      className="project-carousel relative mx-auto max-w-[1600px] pb-24 pt-12"
     >
-      <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
+      <div
+        ref={trackRef}
+        tabIndex={0}
+        aria-label="Projects: scroll horizontally or use the previous and next buttons"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 sm:px-8 [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-primary"
+      >
         {projects.map((project) => (
-          <article key={project.slug} className="flex min-w-0 flex-col">
+          <article
+            key={project.slug}
+            className="flex w-[85%] shrink-0 snap-start flex-col sm:w-[46%] lg:w-[31%]"
+          >
             <Link
               to="/projects"
               hash={project.slug}
               aria-label={`Read ${project.title.replace(/\n/g, " ")} project story`}
-              className="group block aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-card p-3 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              className="group block aspect-[3/2] overflow-hidden bg-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               <FadeImage
                 src={project.image}
@@ -235,21 +264,36 @@ function ProjectGrid() {
                 className="h-full w-full object-contain transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.02]"
               />
             </Link>
-            <h2 className="mt-5 text-2xl font-bold leading-tight tracking-tight">
+            <h2 className="mb-5 mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
               {project.title.replace(/\n/g, " ")}
             </h2>
-            <p className="mb-6 mt-3 text-sm leading-7 text-muted-foreground">
-              {project.story}
-            </p>
             <Link
               to="/projects"
               hash={project.slug}
-              className="mt-auto inline-flex min-h-11 w-fit items-center rounded-full bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              className="petal-button mt-auto inline-flex min-h-11 w-44 self-center items-center justify-center bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-primary-foreground hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
-              Read the story
+              Learn More
             </Link>
           </article>
         ))}
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={() => move(-1)}
+          aria-label="Previous projects"
+          className="carousel-arrow left-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-primary-foreground shadow-sm transition-colors hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:left-6 sm:h-14 sm:w-14"
+        >
+          <ArrowLeft size={30} strokeWidth={1.25} aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          onClick={() => move(1)}
+          aria-label="Next projects"
+          className="carousel-arrow right-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/80 text-primary-foreground shadow-sm transition-colors hover:bg-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:right-6 sm:h-14 sm:w-14"
+        >
+          <ArrowRight size={30} strokeWidth={1.25} aria-hidden="true" />
+        </button>
       </div>
     </section>
   );

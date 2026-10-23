@@ -19,6 +19,7 @@
  */
 
 @theme inline {
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -137,7 +138,6 @@
 }
 
 @keyframes float-y {
-
   0%,
   100% {
     transform: translateY(0);
@@ -173,7 +173,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .animate-float,
   .animate-float-slow,
   .animate-rise-in {
@@ -199,5 +198,54 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+  }
+}
+/* Opposite rounded corners, retaining the portfolio's primary palette. */
+.petal-button {
+  border-radius: 1.25rem 0 1.25rem 0;
+}
+.clip-reveal[data-reveal="visible"] {
+  animation: clip-reveal-in 650ms ease;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+@keyframes clip-reveal-in {
+  from {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clip-reveal[data-reveal] {
+    animation: none;
+    clip-path: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Keep carousel controls centered on the covers at each card breakpoint. */
+.project-carousel {
+  container-type: inline-size;
+}
+.carousel-arrow {
+  position: absolute;
+  z-index: 10;
+  top: calc(3rem + (100cqw - 2.5rem) * 0.85 / 3);
+  transform: translateY(-50%);
+}
+@media (min-width: 640px) {
+  .carousel-arrow {
+    top: calc(3rem + (100cqw - 4rem) * 0.46 / 3);
+  }
+}
+@media (min-width: 1024px) {
+  .carousel-arrow {
+    top: calc(3rem + (100cqw - 4rem) * 0.31 / 3);
   }
 }

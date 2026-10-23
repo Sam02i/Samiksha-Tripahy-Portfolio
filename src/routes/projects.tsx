@@ -402,10 +402,10 @@ function Projects() {
   return (
     <SiteLayout>
       <section className="mx-auto max-w-5xl px-4 pb-24 pt-12 sm:px-8 sm:pt-16">
-        <h1 className="animate-rise-in text-5xl font-extrabold tracking-tight sm:text-7xl">
+        <h1 className="animate-rise-in text-center text-5xl font-extrabold tracking-tight sm:text-7xl">
           Projects.
         </h1>
-        <div className="mt-16 space-y-20">
+        <div className="mt-12 space-y-16 sm:mt-16 sm:space-y-24">
           {projects.map((project) => (
             <article
               key={project.slug}
@@ -435,7 +435,7 @@ function Projects() {
               <p className="mt-5 text-xl font-semibold leading-snug tracking-tight sm:text-2xl">
                 {project.title}
               </p>
-              <p className="mt-4 text-base leading-relaxed text-foreground/80 sm:text-lg">
+              <p className="mt-4 max-w-[75ch] text-base leading-8 text-foreground/80 sm:text-lg">
                 {project.intro}
               </p>
               <figure className="mt-7">
@@ -451,11 +451,11 @@ function Projects() {
                     className="h-full w-full object-contain"
                   />
                 </div>
-                <figcaption className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                <figcaption className="mt-3 text-center text-sm leading-relaxed text-muted-foreground">
                   {project.caption}
                 </figcaption>
               </figure>
-              <div className="mt-7 space-y-5 text-base leading-8 text-foreground/80 [&_strong]:font-semibold [&_strong]:text-foreground">
+              <div className="mx-auto mt-7 max-w-[75ch] space-y-5 text-base leading-8 text-foreground/80 [&_strong]:font-semibold [&_strong]:text-foreground">
                 {project.body.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
                 ))}
