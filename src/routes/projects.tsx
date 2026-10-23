@@ -7,7 +7,7 @@ import { FadeImage } from "@/components/FadeImage";
 import cacheChart from "@/assets/hit-rate-chart.png";
 import transfusionResult from "@/assets/transfusion-hero.png";
 import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
-import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
+import birdFinderCover from "@/assets/birdfinder-cover.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 import loreLabCover from "@/assets/lore-lab-cover.png";
@@ -121,18 +121,21 @@ const projects: Project[] = [
         </strong>
         . The result is compared with{" "}
         <strong>how often that weather happens anyway</strong>, because a saying
-        only means something if it beats the baseline. Each result shows its
-        hit rate with an uncertainty range, and a verdict of promising, same as
+        only means something if it beats the baseline. Each result shows its hit
+        rate with an uncertainty range, and a verdict of promising, same as
         chance, or backfires.
       </>,
       <>
-        Some signs, like cows lying down, cannot be seen by weather
-        instruments. For those, Lore Lab becomes a field notebook:{" "}
-        <strong>you look outside, log what you saw, and the app checks the sky
-        for you later</strong>. Lab tests and outdoor looks are never mixed, and
-        a verdict stays locked until there is enough evidence. The aim is a
-        result that says what the data supports and what it cannot show. One
-        place and one rule is a hint, not proof.
+        Some signs, like cows lying down, cannot be seen by weather instruments.
+        For those, Lore Lab becomes a field notebook:{" "}
+        <strong>
+          you look outside, log what you saw, and the app checks the sky for you
+          later
+        </strong>
+        . Lab tests and outdoor looks are never mixed, and a verdict stays
+        locked until there is enough evidence. The aim is a result that says
+        what the data supports and what it cannot show. One place and one rule
+        is a hint, not proof.
       </>,
     ],
     links: [
@@ -142,21 +145,21 @@ const projects: Project[] = [
   },
   {
     slug: "echofeather",
-    name: "EchoFeather",
+    name: "BirdFinder",
     title: "You hear the bird. But what is it?",
-    inProgress: true,
-    image: birdSpeciesCover,
-    imageWidth: 1456,
-    imageHeight: 1091,
-    imageAlt: "EchoFeather, a bird species identification project cover",
+    image: birdFinderCover,
+    imageWidth: 2902,
+    imageHeight: 1674,
+    imageAlt:
+      "BirdFinder homepage with a mosaic bird and photo and sound identification navigation",
     intro:
-      "A bird call can be the only clue you get. EchoFeather explores how a recorded call or a photograph can turn that fleeting encounter into a possible identification.",
+      "A bird call can be the only clue you get. BirdFinder explores how a recorded call or a photograph can turn that fleeting encounter into a possible identification.",
     caption:
-      "A visual cover for the bird-identification project, currently in development.",
+      "The live BirdFinder homepage, with photo and sound identification paths.",
     body: [
       <>
         A clear photograph is not always available, and a sound alone can be
-        difficult to identify. I’m building EchoFeather around{" "}
+        difficult to identify. I’m building BirdFinder around{" "}
         <strong>
           two ways to recognize the same bird: a photograph or a recorded call
         </strong>
@@ -165,15 +168,18 @@ const projects: Project[] = [
         answer.
       </>,
       <>
-        The project is still in development, with the next step focused on
-        comparing its performance against{" "}
+        The live demo is now available to explore. Further evaluation will focus
+        on comparing its performance against{" "}
         <ResearchLink href="https://birdnet.cornell.edu/">BirdNET</ResearchLink>
         . I want to understand where each input helps and where it falls short.
         The goal is <strong>a useful identification someone can assess</strong>,
         with alternatives they can explore when the evidence is unclear.
       </>,
     ],
-    links: [{ label: "GitHub", href: "https://github.com/Sam02i/EchoFeather" }],
+    links: [
+      { label: "GitHub", href: "https://github.com/Sam02i/EchoFeather" },
+      { label: "Live Demo", href: "https://birdfinder-aohu.onrender.com/" },
+    ],
   },
   {
     slug: "cache-management",

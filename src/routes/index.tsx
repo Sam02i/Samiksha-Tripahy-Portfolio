@@ -12,7 +12,7 @@ import transfusionCover from "@/assets/transfusion-hero.png";
 import taskReceiptsCover from "@/assets/task-receipts-cover.png";
 import animeRecommenderCover from "@/assets/anime-recommender-cover.png";
 import agrioptimaCover from "@/assets/agrioptima-cover.jpg";
-import birdSpeciesCover from "@/assets/bird-species-cover.jpg";
+import birdFinderCover from "@/assets/birdfinder-cover.png";
 import loreLabCover from "@/assets/lore-lab-cover.png";
 
 export const Route = createFileRoute("/")({
@@ -43,7 +43,8 @@ export const Route = createFileRoute("/")({
 const projects = [
   {
     slug: "lore-lab",
-    story: "Is the old weather saying actually right? I tested it against ten years of data.",
+    story:
+      "Is the old weather saying actually right? I tested it against ten years of data.",
     title: "Lore Lab.",
     image: loreLabCover,
     alt: "Lore Lab, a chalkboard-style site that tests folk weather sayings against ten years of real weather data",
@@ -52,9 +53,9 @@ const projects = [
   {
     slug: "echofeather",
     story: "Identifying a bird when you can hear it, see it, or both.",
-    title: "EchoFeather.",
-    image: birdSpeciesCover,
-    alt: "A keel-billed toucan overlaid with a neural network graph, representing the EchoFeather bird species identification project",
+    title: "BirdFinder.",
+    image: birdFinderCover,
+    alt: "BirdFinder homepage with a mosaic bird and photo and sound identification navigation",
     github: "https://github.com/Sam02i/EchoFeather",
   },
   {
@@ -219,7 +220,9 @@ const RESUME_DELAY_MS = 2500;
 function ProjectCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const isPausedRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const pause = () => {
     isPausedRef.current = true;
