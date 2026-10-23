@@ -41,7 +41,7 @@ export function FadeImage({
   return (
     <div
       className={`relative overflow-hidden ${wrapperClassName ?? ""}`}
-      style={{ backgroundColor: SKELETON_COLOR }}
+      style={{ backgroundColor: loaded ? "transparent" : SKELETON_COLOR }}
     >
       {!loaded && (
         <div
@@ -58,8 +58,9 @@ export function FadeImage({
           setLoaded(true);
           onLoad?.(event);
         }}
-        className={`transition-opacity duration-700 ease-out ${loaded ? "opacity-100" : "opacity-0"
-          } ${className ?? ""}`}
+        className={`transition-opacity duration-700 ease-out ${
+          loaded ? "opacity-100" : "opacity-0"
+        } ${className ?? ""}`}
       />
     </div>
   );

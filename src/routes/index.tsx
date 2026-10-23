@@ -242,7 +242,7 @@ function ProjectCarousel() {
         ref={trackRef}
         tabIndex={0}
         aria-label="Projects: scroll horizontally or use the previous and next buttons"
-        className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 sm:px-8 [scrollbar-width:thin] focus-visible:outline-2 focus-visible:outline-primary"
+        className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-5 px-5 pb-6 sm:scroll-px-8 sm:px-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden focus-visible:outline-2 focus-visible:outline-primary"
       >
         {projects.map((project) => (
           <article
@@ -253,7 +253,7 @@ function ProjectCarousel() {
               to="/projects"
               hash={project.slug}
               aria-label={`Read ${project.title.replace(/\n/g, " ")} project story`}
-              className="group block aspect-[3/2] overflow-hidden bg-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              className="group block aspect-video overflow-hidden rounded-lg border border-border bg-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
             >
               <FadeImage
                 src={project.image}
@@ -261,7 +261,7 @@ function ProjectCarousel() {
                 loading="lazy"
                 decoding="async"
                 wrapperClassName="h-full w-full"
-                className="h-full w-full object-contain transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.02]"
+                className={`h-full w-full ${project.slug === "cache-management" ? "object-contain" : "object-cover object-top"} transition-transform duration-300 motion-reduce:transition-none group-hover:scale-[1.02]`}
               />
             </Link>
             <h2 className="mb-5 mt-3 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">

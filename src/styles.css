@@ -236,16 +236,16 @@
 .carousel-arrow {
   position: absolute;
   z-index: 10;
-  top: calc(3rem + (100cqw - 2.5rem) * 0.85 / 3);
+  top: calc(3rem + (100cqw - 2.5rem) * 0.85 * 9 / 32);
   transform: translateY(-50%);
 }
 @media (min-width: 640px) {
   .carousel-arrow {
-    top: calc(3rem + (100cqw - 4rem) * 0.46 / 3);
+    top: calc(3rem + (100cqw - 4rem) * 0.46 * 9 / 32);
   }
 }
 @media (min-width: 1024px) {
   .carousel-arrow {
-    top: calc(3rem + (100cqw - 4rem) * 0.31 / 3);
+    top: calc(3rem + (100cqw - 4rem) * 0.31 * 9 / 32);
   }
 }
